@@ -1,0 +1,30 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+build-storybook.log*
+.pnpm-store
+node_modules
+dist
+dist-ssr
+*.local
+# Storybook
+storybook-static
+docs-build
+coverage
+penssl-legacy-provider
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.eslintcache
