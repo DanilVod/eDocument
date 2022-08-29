@@ -1,16 +1,40 @@
-import { ReactNode } from "react";
-import { ColorsName } from "@/constants/global.styles";
-import { StyledButton } from "./Button.style";
-import React from "react";
+import React, { FC, ReactNode } from 'react'
+import { css } from 'styled-components'
 
-export type buttonType = "normal" | "outlined" | "empty";
-export interface ButtonProps {
-  color?: ColorsName;
-  onclick?: () => void; 
-  type?: buttonType;
-  children: ReactNode;
+import { StyledButton } from './Button.style'
+import { ColorsName } from '@/constants/global.styles'
+
+export type buttonType = 'primary' | 'ghost' | 'secondary'
+
+export type ButtonSize = keyof typeof sizes
+
+export const sizes = {
+	small: css`
+		min-width: 127px;
+		height: 36px;
+	`,
+	medium: css`
+		min-width: 101px;
+		height: 52px;
+	`,
+	large: css`
+		min-width: 149px;
+		height: 52px;
+	`
 }
 
-export const Button = (props: ButtonProps) => {
-  return <StyledButton {...props}>{props.children}</StyledButton>;
-};
+export interface ButtonProps {
+	bgColor?: ColorsName
+	color?: ColorsName
+	children: ReactNode
+	type?: buttonType
+	onClick: () => void
+	size?: ButtonSize
+	disabled?: boolean
+}
+
+export const Button: FC<ButtonProps> = (props: ButtonProps) => {
+	return <StyledButton {...props}>{props.children}</StyledButton>
+}
+
+export default Button

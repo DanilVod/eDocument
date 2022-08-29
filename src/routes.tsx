@@ -1,37 +1,24 @@
-import React from "react";
-import DashboardIcon from "@/assets/dashboard.svg?component";
-import ContactsIcon from "@/assets/contacts.svg?component";
+import React from 'react'
 
-const Error = React.lazy(() => import("@/pages/Error/Error"));
-const Contacts = React.lazy(() => import("@/pages/Contacts/Contacts"));
-const Dashboard = React.lazy(() => import("@/pages/Dashboard/Dashboard"));
+import ContactsIcon from '@/assets/contacts.svg?component'
+import DashboardIcon from '@/assets/dashboard.svg?component'
 
-export interface Iroutes {
-  name: string;
-  path: string;
-  element: JSX.Element;
-  isHidden?: boolean;
+import { Iroutes } from './types/Iroutes'
 
-  routes?: Iroutes[];
-  icon?: JSX.Element;
-}
+const Error = React.lazy(() => import('@/pages/Error/Error'))
+const Dashboard = React.lazy(() => import('@/pages/Dashboard/Dashboard'))
+
 export const ROUTES: Iroutes[] = [
-  {
-    name: "Dashboard",
-    path: "/",
-    element: <Dashboard />,
-    icon: <DashboardIcon />,
-  },
-  {
-    name: "Contacts",
-    path: "/contacts",
-    element: <Contacts />,
-    icon: <ContactsIcon />,
-  },
-  {
-    name: "Error",
-    path: "/*",
-    element: <Error />,
-    isHidden: true,
-  },
-];
+	{
+		name: 'Dashboard',
+		path: '/',
+		element: <Dashboard />,
+		icon: <DashboardIcon />
+	},
+	{
+		name: 'Error',
+		path: '/*',
+		element: <Error />,
+		isHidden: true
+	}
+]

@@ -1,67 +1,130 @@
-import styled, { css } from "styled-components";
-import { colors } from "@/constants/global.styles";
+import styled, { css } from 'styled-components'
 
-import { buttonType, ButtonProps } from "./Button";
+import { ButtonProps, buttonType, sizes } from './Button'
+import { colors } from '@/constants/global.styles'
 
 const handleButtonType = (type: buttonType) => {
-  switch (type) {
-    case "empty":
-      return EmptyButton;
-    case "outlined":
-      return OutlinedButton;
-    default:
-      return NormalButton;
-  }
-};
-const NormalButton = css`
-  background-color: ${colors["accentBlue"]};
-  box-shadow: 0px 4px 10px rgba(16, 156, 241, 0.24);
-  color: ${colors["white"]};
-  :hover {
-    background-color: #34aff9;
-    box-shadow: 0px 8px 16px rgba(52, 175, 249, 0.2);
-  }
-  :active {
-    background-color: #098edf;
-    box-shadow: 0px 2px 6px rgba(9, 142, 223, 0.3);
-  }
-`;
-const OutlinedButton = css`
-  border: 1px solid ${colors["accentBlue"]};
-  color: ${colors["accentBlue"]};
-  :hover {
-    color: #34aff9;
-    border: 1px solid #34aff9;
-  }
-  :active {
-    color: #098edf;
-    border: 1px solid #098edf;
-  }
-`;
-const EmptyButton = css`
-  border: none;
-  background-color: transparent;
-  color: ${colors["accentBlue"]};
-  :hover {
-    color: #34aff9;
-  }
-  :active {
-    color: #098edf;
-  }
-`;
+	switch (type) {
+		case 'primary':
+			return PrimaryButton
+		case 'ghost':
+			return GhostButton
+		case 'secondary':
+			return SecondaryButton
+		default:
+			return PrimaryButton
+	}
+}
 
-export const StyledButton = styled.div<Pick<ButtonProps, "type" | "color">>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 162px;
-  height: 42px;
-  border-radius: 4px;
-  font-family: "Poppins";
-  font-weight: 500;
-  color: ${({ color = "none" }) => colors[color]};
-  :hover {
-    cursor: pointer;
-  }
-  ${({ type = "normal" }) => handleButtonType(type)}
-`;
+const PrimaryButton = css`
+	border: none;
+	color: white;
+`
+
+const GhostButton = css`
+	background: none;
+`
+
+const SecondaryButton = css`
+	background: none;
+	border: none;
+`
+
+export const StyledButton = styled.button<Pick<ButtonProps, 'bgColor' | 'color' | 'type' | 'size'>>`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	background-color: ${({ bgColor = 'SElifeGreen' }) => colors[bgColor]};
+	border: 1px solid ${({ bgColor = 'SElifeGreen' }) => colors[bgColor]};
+	color: ${({ color = 'white' }) => colors[color]};
+	${({ size = 'large' }) => sizes[size]};
+	${({ type = 'primary' }) => handleButtonType(type)}
+
+	:hover {
+		background-color: ${colors['GreenBright']};
+		border: 1px solid ${colors['GreenBright']};
+		color: ${colors['GreenBright']};
+
+		${({ type = 'primary' }) => handleButtonType(type)};
+	}
+
+	:active {
+		background-color: ${colors['SElogoGreen']};
+		border: 1px solid ${colors['SElogoGreen']};
+		color: ${colors['SElogoGreen']};
+
+		${({ type = 'primary' }) => handleButtonType(type)}
+	}
+
+	:disabled {
+		background-color: ${colors['LightGray']};
+		border: 1px solid ${colors['DisabledGray']};
+		color: ${colors['DisabledGray']};
+
+		${({ type = 'primary' }) => handleButtonType(type)}
+	}
+`
+
+// const handleButtonType = (type: buttonType) => {
+// 	switch (type) {
+// 		case 'primary':
+// 			return PrimaryButton
+// 		case 'ghost':
+// 			return GhostButton
+// 		case 'secondary':
+// 			return SecondaryButton
+// 		default:
+// 			return PrimaryButton
+// 	}
+// }
+
+// const PrimaryButton = css`
+// 	border: none;
+// 	color: white;
+// `
+
+// const GhostButton = css`
+// 	background: none;
+// `
+
+// const SecondaryButton = css`
+// 	background: none;
+// 	border: none;
+// `
+
+// export const StyledButton = styled.button<Pick<ButtonProps, 'bgColor' | 'color' | 'type' | 'size'>>`
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: center;
+// 	border-radius: 4px;
+// 	background-color: ${({ bgColor = 'SElifeGreen' }) => colors[bgColor]};
+// 	border: 1px solid ${({ bgColor = 'SElifeGreen' }) => colors[bgColor]};
+// 	color: ${({ color = 'white' }) => colors[color]};
+// 	${({ size = 'large' }) => sizes[size]};
+// 	${({ type = 'primary' }) => handleButtonType(type)}
+
+// 	:hover {
+// 		background-color: ${colors['GreenBright']};
+// 		border: 1px solid ${colors['GreenBright']};
+// 		color: ${colors['GreenBright']};
+
+// 		${({ type = 'primary' }) => handleButtonType(type)};
+// 	}
+
+// 	:active {
+// 		background-color: ${colors['SElogoGreen']};
+// 		border: 1px solid ${colors['SElogoGreen']};
+// 		color: ${colors['SElogoGreen']};
+
+// 		${({ type = 'primary' }) => handleButtonType(type)}
+// 	}
+
+// 	:disabled {
+// 		background-color: ${colors['LightGray']};
+// 		border: 1px solid ${colors['DisabledGray']};
+// 		color: ${colors['DisabledGray']};
+
+// 		${({ type = 'primary' }) => handleButtonType(type)}
+// 	}
+// `
