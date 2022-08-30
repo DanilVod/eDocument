@@ -1,16 +1,27 @@
-import { ReactNode } from "react";
-import { ColorsName } from "@/constants/global.styles";
-import { StyledButton } from "./Button.style";
-import React from "react";
+import React, { FC, ReactNode } from 'react'
 
-export type buttonType = "normal" | "outlined" | "empty";
+import { IconButtonContainer, StyledButton, sizes } from './Button.style'
+
+export type buttonType = 'primary' | 'ghost' | 'secondary'
+
+export type ButtonSize = keyof typeof sizes
+
 export interface ButtonProps {
-  color?: ColorsName;
-  onclick?: () => void; 
-  type?: buttonType;
-  children: ReactNode;
+	children: ReactNode
+	_type?: buttonType
+	onClick: () => void
+	size?: ButtonSize
+	disabled?: boolean
+	icon?: JSX.Element
 }
 
-export const Button = (props: ButtonProps) => {
-  return <StyledButton {...props}>{props.children}</StyledButton>;
-};
+export const Button: FC<ButtonProps> = (props: ButtonProps) => {
+	return (
+		<StyledButton {...props}>
+			{props.children}
+			<IconButtonContainer>{props.icon}</IconButtonContainer>
+		</StyledButton>
+	)
+}
+
+export default Button

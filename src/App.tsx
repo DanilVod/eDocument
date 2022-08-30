@@ -1,11 +1,12 @@
-import { LeftNavigatorMenu } from "@/features/LeftNavigatorMenu/LeftNavigatorMenu";
-import React from "react";
+import React from 'react'
+
+import { LeftNavigatorMenu } from '@/components/molecules/LeftNavigatorMenu'
 
 export const App = React.memo(() => {
-  return (
-    <div className="App">
-      <LeftNavigatorMenu></LeftNavigatorMenu>
-    </div>
-  );
-});
-App.displayName = "App";
+	return (
+		<div className="App">
+			<LeftNavigatorMenu></LeftNavigatorMenu>
+		</div>
+	)
+})
+App.displayName = 'App'
