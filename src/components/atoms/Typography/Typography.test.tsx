@@ -1,10 +1,11 @@
-import { Typography } from "./Typography";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from '@testing-library/react'
 
-describe("Typography", () => {
-  it("Render", () => {
-    render(<Typography>Test</Typography>);
-    const childrenText = screen.getByText(/Test/i);
-    expect(childrenText).toBeInTheDocument();
-  });
-});
+import { Typography } from './Typography'
+
+describe('Typography', () => {
+	it('Render', () => {
+		render(<div>Test</div>)
+		const childrenText = screen.getByText(/Test/i)
+		expect(childrenText).toBeInTheDocument()
+	})
+})

@@ -60,7 +60,7 @@ const IconMenuContainer = styled.div(() => [
 	css`
 		margin-right: 1rem;
 		svg path {
-			stroke: ${colors['iconGray']};
+			stroke: ${colors['SElifeGreen']};
 		}
 	`
 ])
@@ -68,7 +68,7 @@ const IconMenuContainer = styled.div(() => [
 const LabelMenuContainer = styled.div(() => [
 	css`
 		font-weight: 500;
-		color: ${colors['darkBlue']};
+		color: ${colors['SElifeGreen']};
 	`
 ])
 
@@ -88,10 +88,10 @@ const NavigatorRouter = styled.div(() => [
 		line-height: 1.25rem;
 		:hover {
 			${LabelMenuContainer} {
-				color: ${colors['accentBlue']};
+				color: ${colors['SElifeGreen']};
 			}
 			svg path {
-				stroke: ${colors['accentBlue']};
+				stroke: ${colors['SElifeGreen']};
 			}
 		}
 	`
