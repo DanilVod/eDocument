@@ -5,6 +5,7 @@ import { allStatus } from '@/types/share'
 import { colors } from '@/constants/global.styles'
 
 const greenStatus = css`
+
 	background-color: ${colors['SElifeGreen']};
 `
 const purpleStatus = css`
@@ -15,6 +16,7 @@ const redStatus = css`
 `
 const yellowStatus = css`
 	background-color: ${colors['SElifeGreen']};
+
 `
 const defineStatusColor = (type: allStatus) => {
 	switch (type) {
