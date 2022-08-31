@@ -12,9 +12,14 @@ export const colors = {
 	SEskyBlue: '#42B4E6',
 	white: '#FFFFFF',
 	black: '#000000',
+	red: '#ED455D',
 	LightGray: '#F0F0F2',
 	DisabledGray: '#AAAEB0',
 	GreenBright: '#4DE469',
+	TableTitleGray: '#787D8A',
+	TableTitleGrayBG: '#F8FAFB',
+	TextLightGray: '#7C858A',
+	BorderGray: '#E7E8E7',
 	none: ''
 }
 

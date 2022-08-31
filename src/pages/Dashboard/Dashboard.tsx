@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Button, Typography } from '@/components/atoms'
+import { Button, Placeholder, Typography } from '@/components/atoms'
+import Input from '@/components/atoms/Input/Input'
+
+import ErrorIcon from '@/assets/icons/Error.svg?component'
 
 const Dashboard = () => {
+	const [value, setValue] = useState<string>('')
+	const changeValue = (val: string) => setValue(val)
 	return (
 		<div>
-			<Button onClick={() => console.log(111)} size={'large'} _type="primary">
+			<Button onClick={() => console.log(111)} size={'large'} _type="primary" icon={<ErrorIcon />}>
 				<Typography type="p-large">Войти</Typography>
 			</Button>
+			{/* <input type="text" placeholder="qweqwe" /> */}
+			<Input placeholder="Введите " value={value} width="500px" onChange={(e) => setValue(e.target.value)} setValue={changeValue} />
+			<Placeholder label="asd" placeholderText="hi"></Placeholder>
 		</div>
 	)
 }
