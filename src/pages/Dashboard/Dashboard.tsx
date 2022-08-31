@@ -13,9 +13,7 @@ const Dashboard = () => {
 			<Button onClick={() => console.log(111)} size={'large'} _type="primary" icon={<ErrorIcon />}>
 				<Typography type="p-large">Войти</Typography>
 			</Button>
-			{/* <input type="text" placeholder="qweqwe" /> */}
 			<Input placeholder="Введите " value={value} width="500px" onChange={(e) => setValue(e.target.value)} setValue={changeValue} />
-			<Placeholder label="asd" placeholderText="hi"></Placeholder>
 		</div>
 	)
 }

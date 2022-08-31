@@ -42,7 +42,7 @@ const handleInputStatus = (status: inputStatus) => {
 	}
 }
 
-export const StyledInput = styled.input<Pick<InputProps, 'placeholder' | 'status' | 'width' | 'disabled'>>`
+export const StyledInput = styled.input<Pick<InputProps, 'status' | 'width'>>`
 	/* border: 1px solid ${colors['TextLightGray']}; */
 	border-radius: 4px;
 	background-color: ${colors['TableTitleGrayBG']};
@@ -84,25 +84,15 @@ export const InputValueContainer = styled.div`
 	align-items: center;
 `
 
-// export interface iconProps {
-// 	onClick?: () => void
-// 	color?: ColorsName
-// }
-
 export const IconInputContainer = styled.div`
 	margin: 0 8px;
 	position: absolute;
-	/* svg path {
-		stroke: ${colors['TextLightGray']};
-	} */
 `
-export const IconCloseContainer = styled.div`
-	margin: 0 8px;
-	position: absolute;
+export const IconCloseContainer = styled(IconInputContainer)`
 	:hover {
 		cursor: pointer;
 	}
-	svg path {
+	/* svg path {
 		stroke: ${colors['TextLightGray']};
-	}
+	} */
 `

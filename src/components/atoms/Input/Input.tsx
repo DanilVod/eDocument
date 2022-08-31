@@ -23,23 +23,6 @@ export interface InputProps {
 }
 
 export const Input: FC<InputProps> = (props: InputProps) => {
-	// let suf_icon: ReactNode
-
-	// if (props.status && !props.disabled) {
-	// 	suf_icon = <ErrorIcon />
-	// } else if (props.value && !props.disabled) {
-	// 	suf_icon = <CloseIcon />
-	// }
-	//TODO
-
-	// const prop = { ...props }
-
-	// if (props.status && !props.disabled) {
-	// 	prop.suffixIcon = <ErrorIcon />
-	// } else if (props.value && !props.disabled) {
-	// 	prop.suffixIcon = <CloseIcon />
-	// }
-
 	const addSuffixIcon = ({ status, value, setValue }: InputProps) => {
 		if (status && status !== 'none') {
 			return (
@@ -47,7 +30,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
 					<ErrorIcon />
 				</IconInputContainer>
 			)
-		} else if (value && status !== 'none') {
+		} else if (value && status == 'none') {
 			return (
 				<IconCloseContainer onClick={() => setValue('')}>
 					<CloseIcon />
@@ -56,7 +39,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
 		}
 	}
 
-	const addStatusText = (status: inputStatus = 'none') => {
+	const addStatusText = ({ status = 'none' }: InputProps) => {
 		if (status == 'error') return <span>Поле заполнено некорректно</span>
 		else if (status == 'warning') return <span>Пожалуйста, заполните это поле</span>
 	}
@@ -74,11 +57,15 @@ export const Input: FC<InputProps> = (props: InputProps) => {
 					{addSuffixIcon(props)}
 				</InputValueContainer>
 				<Typography type="p-medium" color="red">
-					{addStatusText(props.status)}
+					{addStatusText(props)}
 				</Typography>
 			</div>
 		</InputContainer>
 	)
+}
+
+Input.defaultProps = {
+	status: 'none'
 }
 
 export default Input
