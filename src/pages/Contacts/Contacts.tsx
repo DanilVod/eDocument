@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import {
-	Avatar,
-	Button,
-	Placeholder,
-	Status,
-	Typography
-} from '@/components/atoms'
+import { Filters } from '@/components/organisms/Filters/Filters'
+
+import { StatusFilter } from '@/components/molecules'
+
+import { Avatar, Button, Placeholder, Status, Typography } from '@/components/atoms'
 
 import { getContacts } from '@/services/contactsService'
 
@@ -31,13 +29,19 @@ export const Contacts = () => {
 	}, [])
 
 	const [value, setValue] = useState<string>('')
-
+	const [filterStatus, setfilterStatus] = useState<any>([])
 	const handleOnInputText = React.useCallback((e: string) => {
 		setValue(e)
 	}, [])
+	const handleStatus = (e) => {
+		console.log(e)
+	}
 	// const onChange = React.useCallback((e: any) => setValue(e), [setValue]);
+	console.log(filterStatus)
 	return (
 		<>
+			<Filters filterConfig={[{ status: { statusNames: ['f'], onChange: () => {} } }]}></Filters>
+
 			<Placeholder
 				placeholderText="Jane"
 				type="show"

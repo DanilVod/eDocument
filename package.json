@@ -1,9 +1,10 @@
 {
-  "name": "eDocumnet",
+  "name": "edocumnet",
   "private": true,
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "server": "json-server --watch db.json --port 3001",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
