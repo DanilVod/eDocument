@@ -20,6 +20,7 @@ export const colors = {
 	TableTitleGrayBG: '#F8FAFB',
 	TextLightGray: '#7C858A',
 	BorderGray: '#E7E8E7',
+	LightGreen: '#EDFAEE',
 	none: ''
 }
 

@@ -10,6 +10,7 @@ interface TypographyProps {
 	children: ReactNode
 	color?: ColorsName
 	type: TypographyType
+	isInput?: boolean
 }
 
 type TypographyType = 'h1' | 'h2' | 'h3' | 'h4' | 'h4-bold' | 'h5' | 'p-large' | 'p-medium' | 'p-small'
@@ -97,6 +98,7 @@ const StyledText = styled.div<TypographyProps>`
 	color: ${({ color }) => colors[color || 'none']};
 	font-family: 'Arial';
 	${({ type = 'p-small' }) => handleTypographyType(type)}
+	width: ${({ isInput }) => (isInput ? '100%' : 'auto')};
 `
 export const Typography = (props: TypographyProps) => {
 	return <StyledText {...props}>{props.children}</StyledText>
