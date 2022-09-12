@@ -10,10 +10,10 @@ interface IFormItem {
 	[value: string]: any
 }
 
-// interface ITree {
-// 	[key: string]: any
-// 	children?: ITree[]
-// }
+interface ITree {
+	[key: string]: any
+	children?: ITree[]
+}
 
 interface IProvider {
 	name: IFormItem

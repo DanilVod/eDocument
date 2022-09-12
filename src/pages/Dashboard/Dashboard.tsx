@@ -5,6 +5,7 @@ import ProviderForm from '@/components/molecules/ProviderForm/ProviderForm'
 import { Button, Placeholder, Typography } from '@/components/atoms'
 import Input from '@/components/atoms/Input/Input'
 import Select from '@/components/atoms/Select/Select'
+import TreeSelect from '@/components/atoms/TreeSelect/TreeSelect'
 
 import DownloadIcon from '@/assets/icons/Download.svg?component'
 import ErrorIcon from '@/assets/icons/Error.svg?component'
@@ -27,6 +28,7 @@ const Dashboard = () => {
 			</Button>
 
 			<ProviderForm />
+			<TreeSelect />
 		</div>
 	)
 }

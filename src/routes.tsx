@@ -3,22 +3,59 @@ import React from 'react'
 import ContactsIcon from '@/assets/contacts.svg?component'
 import DashboardIcon from '@/assets/dashboard.svg?component'
 
-import { Iroutes } from './types/Iroutes'
+import { IrouteCategory, Iroutes } from './types/Iroutes'
 
 const Error = React.lazy(() => import('@/pages/Error/Error'))
 const Dashboard = React.lazy(() => import('@/pages/Dashboard/Dashboard'))
-
-export const ROUTES: Iroutes[] = [
+// 'user' , 'adminHR' , 'localHR' , 'HRBP' , 'manager'
+export const ROUTES: IrouteCategory[] = [
 	{
-		name: 'Dashboard',
-		path: '/',
-		element: <Dashboard />,
-		icon: <DashboardIcon />
+		name: 'common',
+		routes: [
+			{
+				name: 'Error',
+				path: '/*',
+				element: <Error />,
+				isHidden: true,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			},
+			{
+				name: 'Новые задачи',
+				path: '/q',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			}
+		],
+		title: '',
+		roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
 	},
 	{
-		name: 'Error',
-		path: '/*',
-		element: <Error />,
-		isHidden: true
+		name: 'problemStatement',
+		routes: [
+			{
+				name: 'Пункт 1',
+				path: '/w',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			},
+			{
+				name: 'Пункт 2',
+				path: '/e',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			},
+			{
+				name: 'Пункт 3',
+				path: '/',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['adminHR', 'localHR', 'HRBP', 'manager']
+			}
+		],
+		title: 'Постановка задачи',
+		roles: ['adminHR', 'user']
 	}
 ]
