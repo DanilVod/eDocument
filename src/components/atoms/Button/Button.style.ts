@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { rootValues } from '../../../constants/global.styles'
+
 import { ButtonProps, buttonType } from './Button'
 import { colors } from '@/constants/global.styles'
 
@@ -19,7 +21,7 @@ export const sizes = {
 }
 
 export const IconButtonContainer = styled.div`
-	margin-left: 4px;
+	margin-left: ${rootValues['smallPd']};
 	svg path {
 		stroke: ${colors['white']};
 	}
@@ -109,8 +111,8 @@ export const StyledButton = styled.button<Pick<ButtonProps, '_type' | 'size'>>`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 4px;
-	padding: 0 20px;
+	border-radius: ${rootValues['radius']};
+	padding: 0 ${rootValues['mediumPd']};
 	${({ size = 'large' }) => sizes[size]};
 	${({ _type = 'primary' }) => handleButtonType(_type)}
 `

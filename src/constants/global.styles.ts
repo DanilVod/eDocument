@@ -24,6 +24,18 @@ export const colors = {
 	none: ''
 }
 
+export const rootValues = {
+	minHeight: '36px',
+	smallPd: '8px',
+	mediumPd: '16px',
+	largePd: '32px',
+	radius: '4px',
+	labelMgRight: '60px',
+	labelWidth: '152px',
+	itemFormMgBottom: '24px',
+	selectBoxShadow: '0px 0px 10px 5px rgba(79, 79, 79, 0.05)'
+}
+
 export const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Poppins', sans-serif;

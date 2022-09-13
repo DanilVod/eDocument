@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { ISelectStyle, IWrapStyledSelect } from './Select'
 import SelectItem from './SelectItem'
-import { colors } from '@/constants/global.styles'
+import { colors, rootValues } from '@/constants/global.styles'
 
 const handleActiveField = ({ isActive, isField }: ISelectStyle) => {
 	if (isActive)
@@ -29,17 +29,17 @@ export const WrapStyledSelect = styled.div<IWrapStyledSelect>`
 
 	/* width: 100%; */
 	position: relative;
-	border-radius: 4px;
-	margin-bottom: 24px;
+	border-radius: ${rootValues['radius']};
+	margin-bottom: ${rootValues['itemFormMgBottom']};
 `
 
 export const StyledSelect = styled.div<ISelectStyle>`
 	width: 100%;
-	height: 36px;
-	border-radius: 4px;
+	height: ${rootValues['minHeight']};
+	border-radius: ${rootValues['radius']};
 	display: flex;
 	align-items: center;
-	padding-left: 16px;
+	padding-left: ${rootValues['mediumPd']};
 	position: relative;
 	width: ${({ width = '400px' }) => width};
 	cursor: default;
@@ -51,10 +51,10 @@ export const StyledSelectList = styled.div<ISelectStyle>`
 	z-index: 2;
 	width: ${({ width = '400px' }) => width};
 	height: fit-content;
-	border-radius: 4px;
+	border-radius: ${rootValues['radius']};
 	background-color: ${colors['white']};
-	margin-top: 12px;
-	box-shadow: 0px 0px 10px 5px rgba(79, 79, 79, 0.05);
+	margin-top: ${rootValues['mediumPd']};
+	box-shadow: ${rootValues['selectBoxShadow']};
 	display: ${(props) => (props.isActive ? 'block' : 'none')};
 	/* transform: scale(0.9); */
 	transition: all 0.3s ease-in;
@@ -79,12 +79,12 @@ export const PrefixIconContainer = styled(IconContainer)`
 
 export const StyledLabel = styled.div`
 	/* border: 1px solid #000; */
-	margin-right: 60px;
-	width: 152px;
+	margin-right: ${rootValues['labelMgRight']};
+	width: ${rootValues['labelWidth']};
 	/* white-space: nowrap; */
 `
 export const ListStyled = styled.div`
-	padding: 16px;
+	padding: ${rootValues['mediumPd']};
 `
 
 export const ListItemWrap = styled.div`
@@ -95,7 +95,7 @@ export const ListItemWrap = styled.div`
 `
 
 export const IconCheckedContainer = styled.div`
-	margin-right: 8px;
+	margin-right: ${rootValues['smallPd']};
 	svg path {
 		fill: ${colors['SELightGray']};
 	}
@@ -108,7 +108,7 @@ export const IconChecked = styled(IconCheckedContainer)`
 `
 
 const ForSingleItem = css`
-	padding-left: 16px;
+	padding-left: ${rootValues['mediumPd']};
 	:hover {
 		cursor: pointer;
 		color: ${colors['SElifeGreen']};
@@ -122,8 +122,8 @@ const ForSingleItem = css`
 export const ListItemStyled = styled.div<SelectItem>`
 	display: flex;
 	align-items: center;
-	height: 36px;
-	border-radius: 4px;
+	height: ${rootValues['minHeight']};
+	border-radius: ${rootValues['radius']};
 	cursor: default;
 	-webkit-user-select: none;
 

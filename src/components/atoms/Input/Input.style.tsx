@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { rootValues } from '../../../constants/global.styles'
+
 import { InputProps } from './Input'
 import { colors } from '@/constants/global.styles'
 
@@ -47,11 +49,11 @@ const handleInputStatus = (error: string) => {
 
 export const StyledInput = styled.input<Pick<InputProps, 'error'>>`
 	/* border: 1px solid ${colors['TextLightGray']}; */
-	border-radius: 4px;
+	border-radius: ${rootValues['radius']};
 	background-color: ${colors['TableTitleGrayBG']};
-	height: 36px;
-	padding-left: 16px;
-	padding-right: 32px;
+	height: ${rootValues['minHeight']};
+	padding-left: ${rootValues['mediumPd']};
+	padding-right: ${rootValues['largePd']};
 	color: ${colors['black']};
 	/* width: 100%; */
 	width: ${({ width = '400px' }) => width};
@@ -77,15 +79,15 @@ export const StyledInput = styled.input<Pick<InputProps, 'error'>>`
 
 export const StyledLabel = styled.div`
 	/* border: 1px solid #000; */
-	margin-right: 60px;
-	width: 152px;
+	margin-right: ${rootValues['labelMgRight']};
+	width: ${rootValues['labelWidth']};
 	/* white-space: nowrap; */
 `
 
 export const InputContainer = styled.div`
 	display: flex;
 	align-items: baseline;
-	margin-bottom: 24px;
+	margin-bottom: ${rootValues['itemFormMgBottom']};
 `
 
 export const InputValueContainer = styled.div`
@@ -95,7 +97,7 @@ export const InputValueContainer = styled.div`
 `
 
 export const IconInputContainer = styled.div`
-	margin: 0 8px;
+	margin: 0 ${rootValues['smallPd']};
 	position: absolute;
 `
 export const IconCloseContainer = styled(IconInputContainer)`
