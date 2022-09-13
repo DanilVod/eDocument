@@ -1,18 +1,32 @@
 import React, { FC } from 'react'
-import { Link, NavLink, Route, Routes } from 'react-router-dom'
+import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { Typography } from '@/components/atoms'
 
+import { IBreadcrumb } from '@/types/IBreadcrumb'
 import { IrouteCategory, Iroutes, NavigatorProps } from '@/types/Iroutes'
 
 import { colors } from '../constants/global.styles'
 
 export const RenderRoutes: FC<NavigatorProps> = ({ routes }) => {
+	const role = 'user'
 	return (
 		<Routes>
 			{routes.map((routeCategory) => {
-				return routeCategory.routes.map((route) => <Route key={route.name} path={route.path} element={<React.Suspense> {route.element}</React.Suspense>} />)
+				return (
+					<Route key={routeCategory.name}>
+						{routeCategory.routes.map((route) => {
+							// history.replaceState([routeCategory.title, route.name], '', route.path)
+							if (route.roles.includes(role))
+								return (
+									<Route key={route.name} path={route.path} element={<React.Suspense> {route.element}</React.Suspense>}>
+										{route.routes && route.routes.map((r) => <Route key={r.name} path={r.path} element={<React.Suspense> {r.element}</React.Suspense>} />)}
+									</Route>
+								)
+						})}
+					</Route>
+				)
 			})}
 			{/* <Route element={<h1>Not Found!</h1>} /> */}
 		</Routes>
@@ -27,10 +41,10 @@ export const RenderRoutes: FC<NavigatorProps> = ({ routes }) => {
 // 	})
 // }
 
-const singleRoute = (route: Iroutes) => {
+const singleRoute = (route: Iroutes, locationState: IBreadcrumb[]) => {
 	return (
 		<NavigatorRouter key={route.name}>
-			<StyledNavLink to={route.path} data-testid={route.name}>
+			<StyledNavLink to={route.path} state={locationState} data-testid={route.name}>
 				<div className="flex">
 					<IconMenuContainer>{route.icon}</IconMenuContainer>
 
@@ -43,12 +57,13 @@ const singleRoute = (route: Iroutes) => {
 	)
 }
 
-export const displayNestedRouteMenu = (routes: Iroutes[]) => {
+export const displayNestedRouteMenu = (routes: Iroutes[], oldBreadcrumbs: IBreadcrumb[]) => {
 	return (
 		<NavigatorContainer>
 			{routes.map((route) => {
+				const breadcrumbs: IBreadcrumb[] = [...oldBreadcrumbs, { title: route.name, path: route.path }]
 				if (route.isHidden) return ''
-				return singleRoute(route)
+				return singleRoute(route, breadcrumbs)
 			})}
 		</NavigatorContainer>
 	)
@@ -74,19 +89,25 @@ export const displayRouteMenu = (routes: IrouteCategory[]) => {
 								</LabelMenuCategoryContainer>
 							)}
 							{routeCategory.routes?.map((route) => {
+								//added in location.state when calling the function singleRoute
+								const breadcrumbs: IBreadcrumb[] = [
+									{ title: routeCategory.title, path: '' },
+									{ title: route.name, path: route.path }
+								]
 								if (route.isHidden || !route.roles.includes(role)) return ''
 								// if this route has sub-routes, then show the ROOT as a list item and recursively render a nested list of route links
 								if (route.routes) {
 									return (
 										<React.Fragment key={index + route.name}>
-											{singleRoute(route)}
-											{displayNestedRouteMenu(route.routes)}
+											{singleRoute(route, breadcrumbs)}
+											{displayNestedRouteMenu(route.routes, breadcrumbs)}
 										</React.Fragment>
 									)
 								}
 
+								// console.log(navigate)
 								// no nested routes, so just render a single route
-								return singleRoute(route)
+								return singleRoute(route, breadcrumbs)
 							})}
 						</React.Fragment>
 					)

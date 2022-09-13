@@ -35,21 +35,37 @@ export const ROUTES: IrouteCategory[] = [
 		routes: [
 			{
 				name: 'Пункт 1',
-				path: '/w',
+				path: '/problemStatement/w',
 				element: <Dashboard />,
 				icon: <DashboardIcon />,
-				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager'],
+				routes: [
+					{
+						name: 'Пункт 3',
+						path: '/problemStatement/w/ww',
+						element: <Dashboard />,
+						icon: <DashboardIcon />,
+						roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+					},
+					{
+						name: 'Пункт 4',
+						path: '/problemStatement/w/we',
+						element: <Dashboard />,
+						icon: <DashboardIcon />,
+						roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+					}
+				]
 			},
 			{
 				name: 'Пункт 2',
-				path: '/e',
+				path: '/problemStatement/e',
 				element: <Dashboard />,
 				icon: <DashboardIcon />,
 				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
 			},
 			{
 				name: 'Пункт 3',
-				path: '/',
+				path: '/problemStatement/r',
 				element: <Dashboard />,
 				icon: <DashboardIcon />,
 				roles: ['adminHR', 'localHR', 'HRBP', 'manager']

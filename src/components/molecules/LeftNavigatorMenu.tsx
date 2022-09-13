@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router'
+
 import { Navigator } from '@/components/atoms'
 
 import { ROUTES } from '@/routes'

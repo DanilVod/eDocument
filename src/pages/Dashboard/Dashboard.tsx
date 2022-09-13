@@ -23,9 +23,9 @@ const Dashboard = () => {
 
 	return (
 		<div>
-			<Button onClick={() => console.log(111)} size={'large'} _type="primary" icon={<DownloadIcon />}>
+			{/* <Button onClick={() => console.log(111)} size={'large'} _type="primary" icon={<DownloadIcon />}>
 				<Typography type="p-large">Войти</Typography>
-			</Button>
+			</Button> */}
 
 			<ProviderForm />
 			<TreeSelect />

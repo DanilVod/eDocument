@@ -3,7 +3,7 @@ import { menuCategory, roles } from './share'
 export interface IrouteCategory {
 	name: string
 	routes: Iroutes[]
-	title?: string
+	title: string
 	roles: roles[]
 }
 
