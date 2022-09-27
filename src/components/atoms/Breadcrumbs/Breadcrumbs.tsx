@@ -14,7 +14,7 @@ const Breadcrumbs = () => {
 	const navigate = useNavigate()
 
 	const navigation = (br: IBreadcrumb) => {
-		if (breadcrumbs.length > 2) {
+		if (breadcrumbs.length > 2 && br.path) {
 			const newBreadcrums = breadcrumbs.slice(0, breadcrumbs.length - 1)
 			navigate(br.path, { state: newBreadcrums })
 		}

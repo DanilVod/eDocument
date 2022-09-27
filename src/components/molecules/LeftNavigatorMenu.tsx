@@ -7,7 +7,7 @@ import { ROUTES } from '@/routes'
 export function LeftNavigatorMenu() {
 	return (
 		<>
-			<div className="w-1/6">
+			<div>
 				<Navigator routes={ROUTES}></Navigator>
 			</div>
 		</>

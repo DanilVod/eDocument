@@ -21,6 +21,7 @@ export const colors = {
 	TextLightGray: '#7C858A',
 	BorderGray: '#E7E8E7',
 	LightGreen: '#EDFAEE',
+	TextDarkGray: '#010F05',
 	none: ''
 }
 

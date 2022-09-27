@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import useComponentVisible from '@/hooks/useComponentVisible'
 
@@ -20,14 +20,18 @@ export interface SelectProps {
 	list: ListItem[]
 	disabled?: boolean
 	required?: boolean
-	onChange: (values: string | string[], name: string) => void
+	onChange: (name: string, values: string | string[]) => void
 	multy?: boolean
+	onBlur?: (name: string, error: string) => void
+	error?: string
+	setFormError?: (err: string) => void
 }
 
 export interface ISelectStyle {
 	isActive?: boolean
 	isField?: boolean
 	width?: string
+	error?: string
 }
 
 export interface IWrapStyledSelect {
@@ -40,19 +44,26 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 	const { ref, isActive, setIsActive } = useComponentVisible(false)
 	const [isField, setIsField] = useState<boolean>(true)
 	const [values, setValues] = useState<string[]>([])
+	const [error, setError] = useState<string>('')
 
 	//setValues асинхронно и хранит предыдущее состояние
 	let nextValues = values
 
-	// useEffect(() => {
-	// 	if ((!props.value || (props.multy && !values.length)) && props.required) {
-	// 		setIsField(false)
-	// 	} else setIsField(true)
-	// }, [props.value, isActive])
-
-	// useEffect(() => {
-	// 	if (!isActive) setIsField(true)
-	// }, [])
+	useEffect(() => {
+		if (props.setFormError) {
+			if ((!props.value || (props.multy && !values.length)) && props.required && !isActive && !isField) {
+				props.setFormError(errors[props.name as keyof typeError].isNotField)
+				setError(errors[props.name as keyof typeError].isNotField)
+			} else {
+				props.setFormError('')
+				setError('')
+			}
+		} else {
+			if ((!props.value || (props.multy && !values.length)) && props.required && !isActive && !isField) {
+				setError(errors[props.name as keyof typeError].isNotField)
+			} else setError('')
+		}
+	}, [isActive])
 
 	const renderSelectValue = () => {
 		if (props.value && !Array.isArray(props.value)) {
@@ -73,13 +84,13 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 	}
 
 	const renderError = () => {
-		if (!isField && (!props.value || (props.multy && !values.length)) && !isActive) {
-			return (
-				<Typography type="p-medium" color="red">
-					{errors[props.name as keyof typeError].isNotField}
-				</Typography>
-			)
-		}
+		// if (!isField && (!props.value || (props.multy && !values.length)) && !isActive) {
+		return (
+			<Typography type="p-medium" color="red">
+				{error || props.error}
+			</Typography>
+		)
+		// }
 	}
 
 	const renderList = () => {
@@ -94,7 +105,7 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 						{!props.multy && (
 							<ListItemWrap
 								onClick={() => {
-									props.onChange('', props.name)
+									props.onChange(props.name, '')
 									if (props.required) setIsField(false)
 								}}
 							>
@@ -109,11 +120,11 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 										if (values.includes(item.text)) nextValues = values.filter((value) => value !== item.text)
 										else nextValues = [...values, item.text]
 										setValues(nextValues)
-										props.onChange(nextValues, props.name)
+										props.onChange(props.name, nextValues)
 										if (!nextValues.length) setIsField(false)
 										else setIsField(true)
 									} else {
-										props.onChange(item.text, props.name)
+										props.onChange(props.name, item.text)
 										setIsField(true)
 									}
 								}}
@@ -132,7 +143,7 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 			<Typography type="p-medium" color="TextLightGray">
 				<StyledLabel>{props.label}</StyledLabel>
 			</Typography>
-			<div>
+			<div style={{ width: '100%' }}>
 				<StyledSelect
 					onClick={() => {
 						if (!props.disabled) setIsActive(!isActive)
@@ -144,6 +155,7 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 					width={props.width}
 					isActive={isActive}
 					isField={isField}
+					error={props.error || error}
 				>
 					{renderSelectValue()}
 					<IconContainer isActive={isActive}>

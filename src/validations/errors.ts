@@ -9,5 +9,6 @@ export const errors = {
 	name: { isNotField: 'Пожалуйста, заполните это поле', isNotValid: 'Поле заполнено некорректно' },
 	email: { isNotField: 'Пожалуйста, заполните это поле', isNotValid: 'Поле заполнено некорректно' },
 	town: { isNotField: 'Пожалуйста, выберите значение из списка', isNotValid: '' },
-	status: { isNotField: 'Пожалуйста, выберите значение из списка', isNotValid: '' }
+	status: { isNotField: 'Пожалуйста, выберите значение из списка', isNotValid: '' },
+	date: { isNotField: 'Заполните поле' }
 }

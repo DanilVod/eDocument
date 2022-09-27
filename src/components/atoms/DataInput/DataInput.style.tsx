@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { rootValues } from '../../../constants/global.styles'
 
-import { InputProps } from './Input'
+import { DataInputProps } from './DataInput'
 import { colors } from '@/constants/global.styles'
 
 const ErrorStatus = css`
@@ -47,7 +47,7 @@ const handleInputStatus = (error: string) => {
 	// }
 }
 
-export const StyledInput = styled.input<Pick<InputProps, 'error'>>`
+export const StyledInput = styled.input<Pick<DataInputProps, 'error'>>`
 	/* border: 1px solid ${colors['TextLightGray']}; */
 	border-radius: ${rootValues['radius']};
 	background-color: ${colors['TableTitleGrayBG']};
@@ -56,7 +56,10 @@ export const StyledInput = styled.input<Pick<InputProps, 'error'>>`
 	padding-right: ${rootValues['largePd']};
 	color: ${colors['black']};
 	/* width: 100%; */
-	width: ${({ width = '100%' }) => width};
+	width: ${({ width = '120px' }) => width};
+	::-webkit-calendar-picker-indicator {
+		display: none;
+	}
 
 	:hover {
 		border: 1px solid ${colors['BorderGray']};
@@ -87,7 +90,6 @@ export const StyledLabel = styled.div`
 export const InputContainer = styled.div`
 	display: flex;
 	align-items: baseline;
-	margin-bottom: ${rootValues['itemFormMgBottom']};
 `
 
 export const InputValueContainer = styled.div`
@@ -96,15 +98,10 @@ export const InputValueContainer = styled.div`
 	align-items: center;
 `
 
-export const IconInputContainer = styled.div`
+export const IconContainer = styled.div`
 	margin: 0 ${rootValues['smallPd']};
 	position: absolute;
-`
-export const IconCloseContainer = styled(IconInputContainer)`
 	:hover {
 		cursor: pointer;
 	}
-	/* svg path {
-		stroke: ${colors['TextLightGray']};
-	} */
 `

@@ -4,13 +4,13 @@ import { ISelectStyle, IWrapStyledSelect } from './Select'
 import SelectItem from './SelectItem'
 import { colors, rootValues } from '@/constants/global.styles'
 
-const handleActiveField = ({ isActive, isField }: ISelectStyle) => {
+const handleActiveField = ({ isActive, isField, error }: ISelectStyle) => {
 	if (isActive)
 		return css`
 			border: 1px solid ${colors['BorderGray']};
 			background-color: ${colors['white']};
 		`
-	else if (!isField) {
+	else if (error) {
 		return css`
 			border: 1px solid ${colors['red']};
 		`
@@ -41,7 +41,7 @@ export const StyledSelect = styled.div<ISelectStyle>`
 	align-items: center;
 	padding-left: ${rootValues['mediumPd']};
 	position: relative;
-	width: ${({ width = '400px' }) => width};
+	width: ${({ width = '100%' }) => width};
 	cursor: default;
 	-webkit-user-select: none;
 	${(props) => handleActiveField(props)};
@@ -98,6 +98,11 @@ export const IconCheckedContainer = styled.div`
 	margin-right: ${rootValues['smallPd']};
 	svg path {
 		fill: ${colors['SELightGray']};
+	}
+	:hover {
+		svg path {
+			fill: ${colors['SElifeGreen']};
+		}
 	}
 `
 
