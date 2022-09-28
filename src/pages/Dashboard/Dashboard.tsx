@@ -66,7 +66,7 @@ const Dashboard = () => {
 		},
 		{
 			component: Select,
-			values: { required: true, multy: true, name: 'status', label: 'Статус', value: provider.status.value, onChange: handleMultySelectChange, placeholder: 'Все статусы', list: status }
+			values: { required: false, multy: true, name: 'status', label: 'Статус', value: provider.status.value, onChange: handleMultySelectChange, placeholder: 'Все статусы', list: status }
 		},
 		{
 			component: Input,

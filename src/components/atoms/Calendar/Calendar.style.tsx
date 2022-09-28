@@ -1,6 +1,11 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
+import { ICalendar } from './Calendar'
 import { rootValues } from '@/constants/global.styles'
+
+interface IisActive {
+	isActive: boolean
+}
 
 const IconContainer = styled.div`
 	/* margin-right: 32px; */
@@ -30,7 +35,10 @@ export const OneSliderContainer = styled.div`
 	align-items: center;
 `
 
-export const StyledCalendar = styled.div`
+export const StyledCalendar = styled.div<IisActive>`
+	opacity: 0;
+	transition: opacity 0.3s, visibility 0.3s;
+	visibility: hidden;
 	height: 332px;
 	position: absolute;
 	background-color: #fff;
@@ -39,4 +47,10 @@ export const StyledCalendar = styled.div`
 	top: 50px;
 	z-index: 2;
 	user-select: none;
+	${(props) =>
+		props.isActive &&
+		css`
+			opacity: 1;
+			visibility: visible;
+		`};
 `

@@ -35,7 +35,7 @@ export interface ISelectStyle {
 }
 
 export interface IWrapStyledSelect {
-	ref: React.RefObject<HTMLDivElement>
+	// ref: React.RefObject<HTMLDivElement>
 	// onClick: () => void
 	width?: string
 }
@@ -94,52 +94,50 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 	}
 
 	const renderList = () => {
-		if (isActive) {
-			return (
-				<StyledSelectList isActive={isActive}>
-					<ListStyled
-						onClick={() => {
-							if (!props.disabled && !props.multy) setIsActive(!isActive)
-						}}
-					>
-						{!props.multy && (
-							<ListItemWrap
-								onClick={() => {
-									props.onChange(props.name, '')
-									if (props.required) setIsField(false)
-								}}
-							>
-								<SelectItem text={props.placeholder} />
-							</ListItemWrap>
-						)}
-						{props.list.map((item: ListItem, index: number) => (
-							<ListItemWrap
-								key={index}
-								onClick={() => {
-									if (props.multy) {
-										if (values.includes(item.text)) nextValues = values.filter((value) => value !== item.text)
-										else nextValues = [...values, item.text]
-										setValues(nextValues)
-										props.onChange(props.name, nextValues)
-										if (!nextValues.length) setIsField(false)
-										else setIsField(true)
-									} else {
-										props.onChange(props.name, item.text)
-										setIsField(true)
-									}
-								}}
-							>
-								<SelectItem multy={props.multy} text={item.text} key={index} values={values} />
-							</ListItemWrap>
-						))}
-					</ListStyled>
-				</StyledSelectList>
-			)
-		}
+		return (
+			<StyledSelectList ref={ref} isActive={isActive}>
+				<ListStyled
+					onClick={() => {
+						if (!props.disabled && !props.multy) setIsActive(!isActive)
+					}}
+				>
+					{!props.multy && (
+						<ListItemWrap
+							onClick={() => {
+								props.onChange(props.name, '')
+								if (props.required) setIsField(false)
+							}}
+						>
+							<SelectItem text={props.placeholder} />
+						</ListItemWrap>
+					)}
+					{props.list.map((item: ListItem, index: number) => (
+						<ListItemWrap
+							key={index}
+							onClick={() => {
+								if (props.multy) {
+									if (values.includes(item.text)) nextValues = values.filter((value) => value !== item.text)
+									else nextValues = [...values, item.text]
+									setValues(nextValues)
+									props.onChange(props.name, nextValues)
+									if (!nextValues.length) setIsField(false)
+									else setIsField(true)
+								} else {
+									props.onChange(props.name, item.text)
+									setIsField(true)
+								}
+							}}
+						>
+							<SelectItem multy={props.multy} text={item.text} key={index} values={values} />
+						</ListItemWrap>
+					))}
+				</ListStyled>
+			</StyledSelectList>
+		)
 	}
 
 	return (
-		<WrapStyledSelect ref={ref} width={props.width}>
+		<WrapStyledSelect width={props.width}>
 			<Typography type="p-medium" color="TextLightGray">
 				<StyledLabel>{props.label}</StyledLabel>
 			</Typography>

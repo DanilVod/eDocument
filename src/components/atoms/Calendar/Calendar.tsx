@@ -8,11 +8,12 @@ import CalendarMonth from '../CalendarMonth/CalendarMonth'
 
 import { ArrowsContainer, BackIconContainer, ForwardIconContainer, StyledCalendar } from './Calendar.style'
 
-interface ICalendar {
+export interface ICalendar {
 	_ref?: React.RefObject<HTMLDivElement>
 	onChange: (dates: DatePickerDate) => void
 	clickDay: (date: Date) => void
 	dates: DatePickerDate
+	isActive: boolean
 }
 
 const Calendar: FC<ICalendar> = (props) => {
@@ -36,7 +37,7 @@ const Calendar: FC<ICalendar> = (props) => {
 	}
 
 	return (
-		<StyledCalendar ref={props._ref}>
+		<StyledCalendar ref={props._ref} isActive={props.isActive}>
 			<ArrowsContainer>
 				<BackIconContainer
 					onClick={() => {

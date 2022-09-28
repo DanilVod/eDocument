@@ -9,8 +9,6 @@ import useComponentVisible from '@/hooks/useComponentVisible'
 import ArrowRight from '@/assets/icons/ArrowRight.svg?component'
 
 import { IconContainer, IputsContainer, StyledDatePicker, StyledLabel } from './DataPicker.style'
-import { errors } from '@/validations/errors'
-import { patterns } from '@/validations/patterns'
 
 // export interface DatePickerStr {
 // 	from: Date | null
@@ -127,7 +125,7 @@ const DataPicker: FC<DataPickerProps> = (props) => {
 	}, [date])
 
 	return (
-		<StyledDatePicker ref={ref}>
+		<StyledDatePicker>
 			{props.multy ? (
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
 					<div style={{ display: 'flex', width: '100%' }}>
@@ -179,7 +177,7 @@ const DataPicker: FC<DataPickerProps> = (props) => {
 						</IputsContainer>
 					</div>
 
-					{isActive && <Calendar clickDay={clickDay} onChange={handleChangeDate} dates={date} />}
+					<Calendar _ref={ref} isActive={isActive} clickDay={clickDay} onChange={handleChangeDate} dates={date} />
 				</div>
 			) : (
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -196,6 +194,8 @@ const DataPicker: FC<DataPickerProps> = (props) => {
 							onClick={() => {
 								if (!isActive) setIsActive(!isActive)
 								setActiveInput('from')
+								// calendarRef
+								// console.log(calendarRef)
 								// input1.current.focus()
 							}}
 							width="120px"
@@ -206,7 +206,7 @@ const DataPicker: FC<DataPickerProps> = (props) => {
 							onChange={handleChangeDateFrom}
 						/>
 					</div>
-					{isActive && <Calendar clickDay={clickDay} onChange={handleChangeDate} dates={date} />}
+					<Calendar _ref={ref} isActive={isActive} clickDay={clickDay} onChange={handleChangeDate} dates={date} />
 				</div>
 			)}
 		</StyledDatePicker>
