@@ -1,7 +1,18 @@
-import React from "react";
+import React from 'react'
+
+import { PageSkeleton } from '@/components/organisms'
+
+import { StatusFilter } from '@/components/molecules'
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
-};
+	const handleChange = () => {}
+	return (
+		<div>
+			<PageSkeleton
+				filters={<StatusFilter statusNames={['a', 'b']} onChange={handleChange} />}
+			></PageSkeleton>
+		</div>
+	)
+}
 
-export default Dashboard;
+export default Dashboard
