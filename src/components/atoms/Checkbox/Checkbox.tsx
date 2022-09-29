@@ -13,7 +13,7 @@ import {
 export interface ICheckbox {
 	label: string
 	checked?: boolean
-	onChange?: (item: ChangeEvent<HTMLInputElement>) => void
+	onChange: (item: ChangeEvent<HTMLInputElement>) => void
 }
 export const Checkbox: FC<ICheckbox> = ({ label, checked, onChange, ...props }) => {
 	const defaultChecked = checked ? checked : false

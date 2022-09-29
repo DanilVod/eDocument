@@ -13,7 +13,7 @@ type Props<TItem> = {
 
 export const Dropdown = <T,>(props: PropsWithChildren<Props<T>>) => {
 	const { label, children } = props
-	const ref = useRef()
+	const ref = useRef(null)
 	const [isOpen, setOpen] = useState(false)
 
 	const handleOpen = () => setOpen(!isOpen)

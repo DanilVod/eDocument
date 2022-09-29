@@ -33,9 +33,9 @@ export const Contacts = () => {
 	const handleOnInputText = React.useCallback((e: string) => {
 		setValue(e)
 	}, [])
-	const handleStatus = (e) => {
-		console.log(e)
-	}
+	// const handleStatus = (e) => {
+	// 	console.log(e)
+	// }
 	// const onChange = React.useCallback((e: any) => setValue(e), [setValue]);
 	console.log(filterStatus)
 	return (
