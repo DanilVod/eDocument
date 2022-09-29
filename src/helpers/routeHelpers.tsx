@@ -20,8 +20,19 @@ export const RenderRoutes: FC<NavigatorProps> = ({ routes }) => {
 							// history.replaceState([routeCategory.title, route.name], '', route.path)
 							if (route.roles.includes(role))
 								return (
-									<Route key={route.name} path={route.path} element={<React.Suspense> {route.element}</React.Suspense>}>
-										{route.routes && route.routes.map((r) => <Route key={r.name} path={r.path} element={<React.Suspense> {r.element}</React.Suspense>} />)}
+									<Route
+										key={route.name}
+										path={route.path}
+										element={<React.Suspense> {route.element}</React.Suspense>}
+									>
+										{route.routes &&
+											route.routes.map((r) => (
+												<Route
+													key={r.name}
+													path={r.path}
+													element={<React.Suspense> {r.element}</React.Suspense>}
+												/>
+											))}
 									</Route>
 								)
 						})}
@@ -61,7 +72,10 @@ export const displayNestedRouteMenu = (routes: Iroutes[], oldBreadcrumbs: IBread
 	return (
 		<NavigatorContainer>
 			{routes.map((route) => {
-				const breadcrumbs: IBreadcrumb[] = [...oldBreadcrumbs, { title: route.name, path: route.path }]
+				const breadcrumbs: IBreadcrumb[] = [
+					...oldBreadcrumbs,
+					{ title: route.name, path: route.path }
+				]
 				if (route.isHidden) return ''
 				return singleRoute(route, breadcrumbs)
 			})}

@@ -21,7 +21,13 @@ const Dashboard = () => {
 		date: IFormItem<DatePickerDate>
 	}
 
-	const initValue = { name: { value: '' }, email: { value: '' }, town: { value: '' }, status: { value: [] }, date: { value: { from: null, to: null } } }
+	const initValue = {
+		name: { value: '' },
+		email: { value: '' },
+		town: { value: '' },
+		status: { value: [] },
+		date: { value: { from: null, to: null } }
+	}
 	const [provider, setProvider] = useState<IProvider>(initValue)
 
 	const handleInputChange = (name: string, value: string) => {
@@ -59,22 +65,64 @@ const Dashboard = () => {
 		{ prefixIcon: <DownloadIcon />, text: 'Требуется согласие' }
 	]
 	const formConfig: formConfig[] = [
-		{ component: DataPicker, values: { required: true, multy: true, name: 'date', label: 'Период', value: provider.date.value, onChange: handleDatePickerChange } },
 		{
-			component: Select,
-			values: { required: true, multy: false, name: 'town', label: 'Город', value: provider.town.value, onChange: handleSelectChange, placeholder: 'Выберите город из списка', list: towns }
+			component: DataPicker,
+			values: {
+				required: true,
+				multy: true,
+				name: 'date',
+				label: 'Период',
+				value: provider.date.value,
+				onChange: handleDatePickerChange
+			}
 		},
 		{
 			component: Select,
-			values: { required: true, multy: true, name: 'status', label: 'Статус', value: provider.status.value, onChange: handleMultySelectChange, placeholder: 'Все статусы', list: status }
+			values: {
+				required: true,
+				multy: false,
+				name: 'town',
+				label: 'Город',
+				value: provider.town.value,
+				onChange: handleSelectChange,
+				placeholder: 'Выберите город из списка',
+				list: towns
+			}
+		},
+		{
+			component: Select,
+			values: {
+				required: true,
+				multy: true,
+				name: 'status',
+				label: 'Статус',
+				value: provider.status.value,
+				onChange: handleMultySelectChange,
+				placeholder: 'Все статусы',
+				list: status
+			}
 		},
 		{
 			component: Input,
-			values: { required: false, name: 'email', label: 'E-mail', value: provider.email.value, onChange: handleInputChange, placeholder: 'Введите email' }
+			values: {
+				required: false,
+				name: 'email',
+				label: 'E-mail',
+				value: provider.email.value,
+				onChange: handleInputChange,
+				placeholder: 'Введите email'
+			}
 		},
 		{
 			component: Input,
-			values: { required: true, name: 'name', label: 'Название', value: provider.name.value, onChange: handleInputChange, placeholder: 'Введите название поставщика услуг' }
+			values: {
+				required: true,
+				name: 'name',
+				label: 'Название',
+				value: provider.name.value,
+				onChange: handleInputChange,
+				placeholder: 'Введите название поставщика услуг'
+			}
 		}
 	]
 	return (
