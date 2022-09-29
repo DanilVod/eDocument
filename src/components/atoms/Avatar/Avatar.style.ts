@@ -35,7 +35,7 @@ const ProfileAvatar = css`
 	height: 46px;
 	width: 46px;
 	&.active {
-		border: 2px solid ${colors['accentBlue']};
+		border: 2px solid ${colors['SElifeGreen']};
 	}
 `
 const AssociatedAvatar = css`

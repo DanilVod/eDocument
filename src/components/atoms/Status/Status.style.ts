@@ -5,16 +5,16 @@ import { allStatus } from '@/types/share'
 import { colors } from '@/constants/global.styles'
 
 const greenStatus = css`
-	background-color: ${colors['green']};
+	background-color: ${colors['SElifeGreen']};
 `
 const purpleStatus = css`
-	background-color: ${colors['purple']};
+	background-color: ${colors['SElifeGreen']};
 `
 const redStatus = css`
-	background-color: ${colors['red']};
+	background-color: ${colors['SElifeGreen']};
 `
 const yellowStatus = css`
-	background-color: ${colors['yellow']};
+	background-color: ${colors['SElifeGreen']};
 `
 const defineStatusColor = (type: allStatus) => {
 	switch (type) {

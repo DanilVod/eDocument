@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { colors, defaultBorderRadius } from '@/constants/global.styles'
+import { colors, rootValues } from '@/constants/global.styles'
 
 export const Root = styled.div`
 	display: flex;
@@ -15,9 +15,9 @@ export const IconWrapper = styled.div<{ isOpen: boolean }>`
 
 export const MenuContainer = styled.div`
 	display: flex;
-	background-color: ${colors['TableTitleGrayBg']};
+	background-color: ${colors['TableTitleGray']};
 	padding: 6px 8px 6px 16px;
-	border-radius: ${defaultBorderRadius};
+	border-radius: ${rootValues['radius']};
 	align-items: center;
 	cursor: pointer;
 `
@@ -29,7 +29,7 @@ export const Control = styled.button`
 export const Menu = styled.div`
 	position: absolute;
 	z-index: 1000;
-	border-radius: ${defaultBorderRadius};
+	border-radius: ${rootValues['radius']};
 	padding: 24px 24px;
 	top: 45px;
 	background-color: #fff;

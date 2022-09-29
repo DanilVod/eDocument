@@ -1,67 +1,118 @@
 import styled, { css } from 'styled-components'
 
+import { rootValues } from '../../../constants/global.styles'
+
 import { ButtonProps, buttonType } from './Button'
 import { colors } from '@/constants/global.styles'
 
-const handleButtonType = (type: buttonType) => {
-	switch (type) {
-		case 'empty':
-			return EmptyButton
-		case 'outlined':
-			return OutlinedButton
-		default:
-			return NormalButton
-	}
+export const sizes = {
+	small: css`
+		min-width: 127px;
+		height: 36px;
+	`,
+	medium: css`
+		min-width: 101px;
+		height: 52px;
+	`,
+	large: css`
+		min-width: 149px;
+		height: 52px;
+	`
 }
-const NormalButton = css`
-	background-color: ${colors['accentBlue']};
-	box-shadow: 0px 4px 10px rgba(16, 156, 241, 0.24);
-	color: ${colors['white']};
-	:hover {
-		background-color: #34aff9;
-		box-shadow: 0px 8px 16px rgba(52, 175, 249, 0.2);
-	}
-	:active {
-		background-color: #098edf;
-		box-shadow: 0px 2px 6px rgba(9, 142, 223, 0.3);
-	}
-`
-const OutlinedButton = css`
-	border: 1px solid ${colors['accentBlue']};
-	color: ${colors['accentBlue']};
-	:hover {
-		color: #34aff9;
-		border: 1px solid #34aff9;
-	}
-	:active {
-		color: #098edf;
-		border: 1px solid #098edf;
-	}
-`
-const EmptyButton = css`
-	border: none;
-	background-color: transparent;
-	color: ${colors['accentBlue']};
-	:hover {
-		color: #34aff9;
-	}
-	:active {
-		color: #098edf;
+
+export const IconButtonContainer = styled.div`
+	margin-left: ${rootValues['smallPd']};
+	svg path {
+		stroke: ${colors['white']};
 	}
 `
 
-export const StyledButton = styled.div<Pick<ButtonProps, 'type' | 'color' | 'children'>>`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-width: 162px;
-	height: 42px;
-	border-radius: 4px;
-	font-family: 'Poppins';
-	font-weight: 500;
-	color: ${({ color = 'none' }) => colors[color]};
+const handleButtonType = (type: buttonType) => {
+	switch (type) {
+		case 'primary':
+			return PrimaryButton
+		case 'ghost':
+			return GhostButton
+		case 'secondary':
+			return SecondaryButton
+		default:
+			return PrimaryButton
+	}
+}
+
+const PrimaryButton = css`
+	border: none;
+	background-color: ${colors['SElifeGreen']};
+	color: ${colors['white']};
+
 	:hover {
+		background-color: ${colors['GreenBright']};
+	}
+
+	:active {
+		background-color: ${colors['SElogoGreen']};
+	}
+
+	:disabled {
+		background-color: ${colors['LightGray']};
+		color: ${colors['DisabledGray']};
+		svg path {
+			stroke: ${colors['DisabledGray']};
+		}
+	}
+`
+
+const GhostButton = css`
+	background: none;
+	color: ${colors['SElifeGreen']};
+	border: 1px solid ${colors['SElifeGreen']};
+	:hover {
+		color: ${colors['GreenBright']};
+		border: 1px solid ${colors['GreenBright']};
 		cursor: pointer;
 	}
-	${({ type = 'normal' }) => handleButtonType(type)}
+
+	:active {
+		color: ${colors['SElogoGreen']};
+		border: 1px solid ${colors['SElogoGreen']};
+	}
+
+	:disabled {
+		color: ${colors['SELightGray']};
+		border: 1px solid ${colors['DisabledGray']};
+		svg path {
+			stroke: ${colors['DisabledGray']};
+		}
+	}
+`
+
+const SecondaryButton = css`
+	background: none;
+	border: none;
+	color: ${colors['SElifeGreen']};
+	:hover {
+		color: ${colors['GreenBright']};
+		cursor: pointer;
+	}
+
+	:active {
+		color: ${colors['SElogoGreen']};
+	}
+
+	:disabled {
+		color: ${colors['SELightGray']};
+		svg path {
+			stroke: ${colors['DisabledGray']};
+		}
+	}
+`
+
+export const StyledButton = styled.button<Pick<ButtonProps, '_type' | 'size'>>`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: ${rootValues['radius']};
+	padding: 0 ${rootValues['mediumPd']};
+	${({ size = 'large' }) => sizes[size]};
+	${({ _type = 'primary' }) => handleButtonType(_type)}
 `

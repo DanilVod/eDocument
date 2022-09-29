@@ -1,17 +1,21 @@
-import React from "react";
-import { Iroutes } from "@/routes";
-import { displayRouteMenu, RenderRoutes } from "@/helpers/routeHelpers";
+import React, { FC } from 'react'
 
-interface NavigatorProps {
-  routes: Iroutes[];
+import { RenderRoutes, displayRouteMenu } from '@/helpers/routeHelpers'
+
+import { NavigatorProps } from '@/types/Iroutes'
+
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
+
+import { StyledNavigator, StyledPage } from './Navigator.style'
+
+export const Navigator: FC<NavigatorProps> = ({ routes }) => {
+	return (
+		<div className="flex">
+			<StyledNavigator>{displayRouteMenu(routes)}</StyledNavigator>
+			<StyledPage>
+				<Breadcrumbs />
+				<RenderRoutes routes={routes} />
+			</StyledPage>
+		</div>
+	)
 }
-export const Navigator = ({ routes }: NavigatorProps) => {
-  return (
-    <div>
-      <div className="routes">{displayRouteMenu(routes)}</div>
-      <div>
-        <RenderRoutes routes={routes} />
-      </div>
-    </div>
-  );
-};

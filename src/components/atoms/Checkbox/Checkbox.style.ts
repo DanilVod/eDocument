@@ -27,7 +27,7 @@ export const StyledCheckbox = styled.div<Pick<ICheckbox, 'checked'>>`
 	width: 24px;
 	height: 24px;
 	border: ${(props) => (props.checked ? 'none' : `1px solid ${colors['SELightGray']}`)};
-	background: ${(props) => (props.checked ? colors['SELifeGreen'] : 'white')};
+	background: ${(props) => (props.checked ? colors['SElifeGreen'] : 'white')};
 	border-radius: 4px;
 	transition: all 150ms;
 	${Icon} {
@@ -35,7 +35,7 @@ export const StyledCheckbox = styled.div<Pick<ICheckbox, 'checked'>>`
 	}
 	:hover {
 		cursor: pointer;
-		border: ${(props) => (props.checked ? 'none' : `1px solid ${colors['SELifeGreen']}`)};
+		border: ${(props) => (props.checked ? 'none' : `1px solid ${colors['SElifeGreen']}`)};
 	}
 `
 export const CheckboxContainer = styled.div`

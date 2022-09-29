@@ -3,44 +3,75 @@ import React from 'react'
 import ContactsIcon from '@/assets/contacts.svg?component'
 import DashboardIcon from '@/assets/dashboard.svg?component'
 
-import Tasks from './pages/Tasks/Tasks'
+import { IrouteCategory, Iroutes } from './types/Iroutes'
 
 const Error = React.lazy(() => import('@/pages/Error/Error'))
-const Contacts = React.lazy(() => import('@/pages/Contacts/Contacts'))
 const Dashboard = React.lazy(() => import('@/pages/Dashboard/Dashboard'))
-
-export interface Iroutes {
-	name: string
-	path: string
-	page: JSX.Element
-	isHidden?: boolean
-
-	routes?: Iroutes[]
-	icon?: JSX.Element
-}
-export const ROUTES: Iroutes[] = [
+// 'user' , 'adminHR' , 'localHR' , 'HRBP' , 'manager'
+export const ROUTES: IrouteCategory[] = [
 	{
-		name: 'Dashboard',
-		path: '/',
-		page: <Dashboard />,
-		icon: <DashboardIcon />
+		name: 'common',
+		routes: [
+			{
+				name: 'Error',
+				path: '/*',
+				element: <Error />,
+				isHidden: true,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			},
+			{
+				name: 'Новые задачи',
+				path: '/q',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			}
+		],
+		title: '',
+		roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
 	},
 	{
-		name: 'Contacts',
-		path: '/contacts',
-		page: <Contacts />,
-		icon: <ContactsIcon />
-	},
-	{
-		name: 'Tasks',
-		path: '/task',
-		page: <Tasks />,
-		icon: <ContactsIcon />
-	},
-	{
-		name: 'Error',
-		path: '/*',
-		page: <Error />,
-		isHidden: true
+		name: 'problemStatement',
+		routes: [
+			{
+				name: 'Пункт 1',
+				path: '/problemStatement/w',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager'],
+				routes: [
+					{
+						name: 'Пункт 3',
+						path: '/problemStatement/w/ww',
+						element: <Dashboard />,
+						icon: <DashboardIcon />,
+						roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+					},
+					{
+						name: 'Пункт 4',
+						path: '/problemStatement/w/we',
+						element: <Dashboard />,
+						icon: <DashboardIcon />,
+						roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+					}
+				]
+			},
+			{
+				name: 'Пункт 2',
+				path: '/problemStatement/e',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['user', 'adminHR', 'localHR', 'HRBP', 'manager']
+			},
+			{
+				name: 'Пункт 3',
+				path: '/problemStatement/r',
+				element: <Dashboard />,
+				icon: <DashboardIcon />,
+				roles: ['adminHR', 'localHR', 'HRBP', 'manager']
+			}
+		],
+		title: 'Постановка задачи',
+		roles: ['adminHR', 'user']
 	}
 ]

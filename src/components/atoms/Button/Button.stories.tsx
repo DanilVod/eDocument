@@ -17,6 +17,6 @@ const Template: ComponentStory<typeof Button> = (args) => (
 
 export const Example = Template.bind({})
 Example.args = {
-	type: 'normal',
+	_type: 'primary',
 	children: 'Test button'
 }
