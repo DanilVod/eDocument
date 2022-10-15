@@ -1,4 +1,4 @@
-export type typePattern = typeof patterns
+export type typePattern = keyof typeof patterns
 
 export const patterns = {
 	name: `^[a-z ,.'-]+$`,

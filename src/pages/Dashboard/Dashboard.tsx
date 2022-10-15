@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import Forms, { formConfig } from '@/components/organisms/Forms'
 
@@ -10,71 +10,106 @@ import Select from '@/components/atoms/Select/Select'
 import DownloadIcon from '@/assets/icons/Download.svg?component'
 
 const Dashboard = () => {
-	interface IFormItem<T> {
-		value: T
-	}
-	interface IProvider {
-		name: IFormItem<string>
-		email: IFormItem<string>
-		town: IFormItem<string>
-		status: IFormItem<string[]>
-		date: IFormItem<DatePickerDate>
-	}
+	// interface IFormItem<T> {
+	// 	value: T
+	// }
+	// interface IProvider {
+	// 	name: IFormItem<string>
+	// 	email: IFormItem<string>
+	// 	town: IFormItem<string>
+	// 	status: IFormItem<string[]>
+	// 	date: IFormItem<DatePickerDate>
+	// }
 
 	const initValue = { name: { value: '' }, email: { value: '' }, town: { value: '' }, status: { value: [] }, date: { value: { from: null, to: null } } }
-	const [provider, setProvider] = useState<IProvider>(initValue)
+	const [provider, setProvider] = useState(initValue)
 
-	const handleInputChange = (name: string, value: string) => {
-		setProvider({ ...provider, [name]: { value: value } })
-	}
-	const handleDatePickerChange = (name: string, value: DatePickerDate) => {
-		setProvider({ ...provider, [name]: { value: value } })
+	const handleSubmit = (formValues: { [key: string]: any }) => {
+		console.log(formValues)
 	}
 
-	const handleSelectChange = (name: string, value: string | string[]) => {
-		setProvider({ ...provider, [name]: { value: value } })
-	}
+	const towns = useMemo(
+		() => [
+			{ prefixIcon: '', text: 'Волгоград' },
+			{ prefixIcon: <DownloadIcon />, text: 'Питер' },
+			{ prefixIcon: <DownloadIcon />, text: 'Москва' },
+			{ prefixIcon: <DownloadIcon />, text: 'Екатеринбург' },
+			{ prefixIcon: <DownloadIcon />, text: 'Пермь' }
+		],
+		[]
+	)
 
-	const handleMultySelectChange = (name: string, values: string | string[]) => {
-		setProvider({ ...provider, [name]: { value: [...values] } })
-	}
+	const status = useMemo(
+		() => [
+			{ prefixIcon: '', text: 'Ознакомлен' },
+			{ prefixIcon: <DownloadIcon />, text: 'Просрочено' },
+			{ prefixIcon: <DownloadIcon />, text: 'Отозвано' },
+			{ prefixIcon: <DownloadIcon />, text: 'Требуется оригинал' },
+			{ prefixIcon: <DownloadIcon />, text: 'Требуется согласие' }
+		],
+		[]
+	)
 
-	const handleSubmit = () => {
-		console.log(provider)
-	}
-
-	const towns = [
-		{ prefixIcon: '', text: 'Волгоград' },
-		{ prefixIcon: <DownloadIcon />, text: 'Питер' },
-		{ prefixIcon: <DownloadIcon />, text: 'Москва' },
-		{ prefixIcon: <DownloadIcon />, text: 'Екатеринбург' },
-		{ prefixIcon: <DownloadIcon />, text: 'Пермь' }
-	]
-
-	const status = [
-		{ prefixIcon: '', text: 'Ознакомлен' },
-		{ prefixIcon: <DownloadIcon />, text: 'Просрочено' },
-		{ prefixIcon: <DownloadIcon />, text: 'Отозвано' },
-		{ prefixIcon: <DownloadIcon />, text: 'Требуется оригинал' },
-		{ prefixIcon: <DownloadIcon />, text: 'Требуется согласие' }
-	]
 	const formConfig: formConfig[] = [
-		{ component: DataPicker, values: { required: true, multy: true, name: 'date', label: 'Период', value: provider.date.value, onChange: handleDatePickerChange } },
 		{
-			component: Select,
-			values: { required: true, multy: false, name: 'town', label: 'Город', value: provider.town.value, onChange: handleSelectChange, placeholder: 'Выберите город из списка', list: towns }
+			component: DataPicker,
+			values: {
+				validations: {
+					required: true
+				},
+				multy: true,
+				name: 'date',
+				label: 'Период'
+			}
 		},
 		{
 			component: Select,
-			values: { required: false, multy: true, name: 'status', label: 'Статус', value: provider.status.value, onChange: handleMultySelectChange, placeholder: 'Все статусы', list: status }
+			values: {
+				multy: false,
+				name: 'town',
+				label: 'Город',
+				placeholder: 'Выберите город из списка',
+				list: towns,
+				validations: {
+					required: true,
+					errorMessage: 'Пожалуйста, заполните это поле'
+				}
+			}
+		},
+		{
+			component: Select,
+			values: {
+				multy: true,
+				name: 'status',
+				label: 'Статус',
+				placeholder: 'Все статусы',
+				list: status,
+				validations: {
+					required: true,
+					errorMessage: 'Пожалуйста, заполните это поле'
+				}
+			}
 		},
 		{
 			component: Input,
-			values: { required: false, name: 'email', label: 'E-mail', value: provider.email.value, onChange: handleInputChange, placeholder: 'Введите email' }
+			values: {
+				name: 'email',
+				label: 'E-mail',
+				placeholder: 'Введите email',
+				validations: {
+					required: { value: true, errorMessage: 'Пожалуйста, заполните это поле' },
+					pattern: { type: 'email', errorMessage: 'Поле заполнено некорректно' }
+				}
+			}
 		},
 		{
 			component: Input,
-			values: { required: true, name: 'name', label: 'Название', value: provider.name.value, onChange: handleInputChange, placeholder: 'Введите название поставщика услуг' }
+			values: {
+				name: 'name',
+				label: 'Название',
+				placeholder: 'Введите название поставщика услуг',
+				validations: { required: { value: true } }
+			}
 		}
 	]
 	return (

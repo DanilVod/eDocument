@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components'
 
-import { ISelectStyle, IWrapStyledSelect } from './Select'
+import { ISelectStyle } from './Select'
 import SelectItem from './SelectItem'
 import { colors, rootValues } from '@/constants/global.styles'
 
-const handleActiveField = ({ isActive, isField, error }: ISelectStyle) => {
+const handleActiveField = ({ isActive, error }: ISelectStyle) => {
 	if (isActive)
 		return css`
 			border: 1px solid ${colors['BorderGray']};
@@ -23,7 +23,7 @@ const handleActiveField = ({ isActive, isField, error }: ISelectStyle) => {
 	`
 }
 
-export const WrapStyledSelect = styled.div<IWrapStyledSelect>`
+export const WrapStyledSelect = styled.div<{ width?: string }>`
 	display: flex;
 	align-items: baseline;
 

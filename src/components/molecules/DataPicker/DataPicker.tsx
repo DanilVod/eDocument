@@ -1,19 +1,19 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import { Action } from '@reduxjs/toolkit'
+import { useWhyDidYouUpdate } from 'ahooks'
+import React, { FC, createContext, useCallback, useEffect, useRef, useState } from 'react'
 
 import { Typography } from '@/components/atoms'
 import Calendar from '@/components/atoms/Calendar/Calendar'
 import DataInput from '@/components/atoms/DataInput/DataInput'
 
 import useComponentVisible from '@/hooks/useComponentVisible'
+import useDebounce from '@/hooks/useDebounce'
 
 import ArrowRight from '@/assets/icons/ArrowRight.svg?component'
 
 import { IconContainer, IputsContainer, StyledDatePicker, StyledLabel } from './DataPicker.style'
-
-// export interface DatePickerStr {
-// 	from: Date | null
-// 	to?: Date | null
-// }
+import { clickDay } from './utils/clickDay'
+import { dateToString, stringToDate } from './utils/dateStringConvert'
 
 export interface DatePickerDate {
 	from: Date | null
@@ -22,195 +22,156 @@ export interface DatePickerDate {
 
 interface DataPickerProps {
 	name: string
-	value: DatePickerDate
+	value?: DatePickerDate
 	onChange: (name: string, value: DatePickerDate) => void
 	multy?: boolean
 	label: string
-	required?: boolean
+	// required?: boolean
 	error?: string
-	setFormError?: (err: string) => void
+	validations?: { required: boolean }
 }
 
-const DataPicker: FC<DataPickerProps> = (props) => {
-	const { ref, isActive, setIsActive } = useComponentVisible(false)
-	const [date, setDate] = useState<DatePickerDate>({ from: null, to: null })
-	const [activeInput, setActiveInput] = useState<string>('')
+export interface IDataPickerContext {
+	dates: DatePickerDate
+	setDates: (date: DatePickerDate) => void
+	// activeInput: string
+	// setActiveInput: (str: string) => void
+}
 
-	const [valueFrom, setValueFrom] = useState<string>('')
-	const [valueTo, setValueTo] = useState<string>('')
+export const DataPickerContext = createContext<IDataPickerContext>({ dates: { from: null, to: null }, setDates: () => {} })
+
+const DataPicker: FC<DataPickerProps> = (props) => {
+	// useWhyDidYouUpdate('DataPicker', props)
+	const required = props.validations?.required
+
+	const { ref, isActive, setIsActive } = useComponentVisible(false)
+	const [dates, setDates] = useState<DatePickerDate>({ from: null, to: null })
+	const [activeInput, setActiveInput] = useState<string>('')
 
 	const input1 = useRef() as React.MutableRefObject<HTMLInputElement>
 	const input2 = useRef() as React.MutableRefObject<HTMLInputElement>
 
-	function dateToString(date: Date | null) {
-		if (!date) return ''
+	const update = useDebounce((to) => {
+		if (dates.from && to && dates.from >= to) {
+			setDates({ ...dates, to: null })
+			input2.current.value = ''
+		} else setDates({ ...dates, to: to })
+	}, 1000)
 
-		let month = `${date.getMonth() + 1}`
-		if (date.getMonth() + 1 < 10) month = '0' + month
-		let day = `${date.getDate()}`
-		if (date.getDate() < 10) day = '0' + day
-
-		const strDate = `${date.getFullYear()}-${month}-${day}`
-		return strDate
-	}
-
-	function stringToDate(string: string) {
-		const dates = string.split('-').map(Number)
-		const date = new Date(dates[0], dates[1] - 1, dates[2])
-		if (isNaN(date.getTime())) return null
-		return date
-	}
-
-	const clickDay = (newDate: Date) => {
-		if (activeInput == 'from') {
-			if (date.to == null && !date.to) {
-				setDate({ ...date, from: newDate })
-				setValueFrom(dateToString(newDate))
-				if (!props.multy) {
-					return
-				}
-				setActiveInput('to')
-
-				input2.current.focus()
-			} else {
-				if (newDate < date.to) {
-					setDate({ ...date, from: newDate })
-					setValueFrom(dateToString(newDate))
-				} else {
-					setDate({ ...date, to: newDate })
-					setValueTo(dateToString(newDate || null))
-				}
-			}
-		} else if (activeInput == 'to') {
-			if (date.from == null) {
-				setDate({ ...date, to: newDate })
-				setValueTo(dateToString(newDate || null))
-				setActiveInput('from')
-				input1.current.focus()
-			} else {
-				if (newDate > date.from) {
-					setDate({ ...date, to: newDate })
-					setValueTo(dateToString(newDate || null))
-				} else {
-					setDate({ ...date, from: newDate })
-					setValueFrom(dateToString(newDate))
-				}
-			}
-		}
-	}
+	const onClickDay = useCallback(
+		(newDate: Date) => {
+			clickDay(newDate, dates, setDates, activeInput, setActiveInput, input1, input2, props.multy)
+		},
+		[dates, activeInput]
+	)
 
 	const handleChangeDateFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setValueFrom(e.target.value)
-		setDate({ ...date, from: stringToDate(e.target.value) })
+		// setValueFrom(e.target.value)
+		input1.current.value = e.target.value
+		setDates({ ...dates, from: stringToDate(e.target.value) })
 	}
 
 	const handleChangeDateTo = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setValueTo(e.target.value)
-
+		// setValueTo(e.target.value)
+		input2.current.value = e.target.value
 		const to = stringToDate(e.target.value)
-		if (date.from && to && date.from > to) {
-			setDate({ ...date, to: null })
-		} else setDate({ ...date, to: to })
+		update(to)
 	}
 	const handleChangeDate = (dates: DatePickerDate) => {
-		setDate({ ...dates })
-		setValueFrom(dateToString(dates.from))
-		setValueTo(dateToString(dates.to || null))
+		setDates({ ...dates })
+		input1.current.value = dateToString(dates.from)
+		// setValueFrom(dateToString(dates.from))
+		input2.current.value = dateToString(dates.to || null)
+		// setValueTo(dateToString(dates.to || null))
 	}
+
 	useEffect(() => {
-		if (date.from && date.to) {
-			props.onChange(props.name, date)
-			if (props.setFormError) props.setFormError('')
-		} else props.onChange(props.name, date)
-	}, [date])
+		if (dates.from && dates.to && !isActive) {
+			props.onChange(props.name, dates)
+		}
+	}, [isActive])
 
 	return (
-		<StyledDatePicker>
-			{props.multy ? (
-				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<div style={{ display: 'flex', width: '100%' }}>
-						<StyledLabel>
-							<Typography type="p-medium" color="TextLightGray">
-								{props.label}
-							</Typography>
-						</StyledLabel>
+		<DataPickerContext.Provider value={{ dates, setDates }}>
+			<StyledDatePicker>
+				{props.multy ? (
+					<div style={{ display: 'flex', justifyContent: 'center' }}>
+						<div style={{ display: 'flex', width: '100%' }}>
+							<StyledLabel>
+								<Typography type="p-medium" color="TextLightGray">
+									{props.label}
+								</Typography>
+							</StyledLabel>
 
-						<IputsContainer>
+							<IputsContainer>
+								<DataInput
+									required={required}
+									_ref={input1}
+									onClick={() => {
+										if (!isActive) setIsActive(!isActive)
+										setActiveInput('from')
+									}}
+									width="130px"
+									name={props.name + 'From'}
+									onChange={handleChangeDateFrom}
+									error={props.error}
+									isActiveCalendar={isActive}
+								/>
+								<IconContainer>
+									<ArrowRight />
+								</IconContainer>
+								<DataInput
+									disabled={!dates.from}
+									required={required}
+									_ref={input2}
+									onClick={() => {
+										if (!isActive && !input2.current.disabled) {
+											setIsActive(!isActive)
+											setActiveInput('to')
+										}
+									}}
+									width="130px"
+									name={props.name + 'To'}
+									onChange={handleChangeDateTo}
+									error={props.error}
+									isActiveCalendar={isActive}
+								/>
+							</IputsContainer>
+						</div>
+
+						<Calendar _ref={ref} isActive={isActive} clickDay={onClickDay} onChange={handleChangeDate} />
+					</div>
+				) : (
+					<div style={{ display: 'flex', justifyContent: 'center' }}>
+						<div style={{ display: 'flex', width: '100%' }}>
+							<StyledLabel>
+								<Typography type="p-medium" color="TextLightGray">
+									{props.label}
+								</Typography>
+							</StyledLabel>
 							<DataInput
-								required={props.required}
+								required
+								error={props.error}
 								_ref={input1}
 								onClick={() => {
-									// if (date.from && date.to) setIsActive(false)
 									if (!isActive) setIsActive(!isActive)
 									setActiveInput('from')
-									// input1.current.focus()
 								}}
-								width="130px"
+								width="120px"
 								name={props.name + 'From'}
 								placeholder="Период"
 								label="Дата начала"
-								value={valueFrom}
+								// value={valueFrom}
 								onChange={handleChangeDateFrom}
-								error={props.error}
+								isActiveCalendar={isActive}
 							/>
-							<IconContainer>
-								<ArrowRight />
-							</IconContainer>
-							<DataInput
-								required={props.required}
-								_ref={input2}
-								// disabled={date.from ? false : true}
-								onClick={() => {
-									// if (date.from && date.to) setIsActive(false)
-									if (!isActive) setIsActive(!isActive)
-									setActiveInput('to')
-									// input2.current.focus()
-								}}
-								width="130px"
-								name={props.name + 'To'}
-								placeholder="Период"
-								label="Дата начала"
-								value={valueTo}
-								onChange={handleChangeDateTo}
-								error={props.error}
-							/>
-						</IputsContainer>
+						</div>
+						<Calendar _ref={ref} isActive={isActive} clickDay={onClickDay} onChange={handleChangeDate} />
 					</div>
-
-					<Calendar _ref={ref} isActive={isActive} clickDay={clickDay} onChange={handleChangeDate} dates={date} />
-				</div>
-			) : (
-				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<div style={{ display: 'flex', width: '100%' }}>
-						<StyledLabel>
-							<Typography type="p-medium" color="TextLightGray">
-								{props.label}
-							</Typography>
-						</StyledLabel>
-						<DataInput
-							required
-							error={props.error}
-							_ref={input1}
-							onClick={() => {
-								if (!isActive) setIsActive(!isActive)
-								setActiveInput('from')
-								// calendarRef
-								// console.log(calendarRef)
-								// input1.current.focus()
-							}}
-							width="120px"
-							name={props.name + 'From'}
-							placeholder="Период"
-							label="Дата начала"
-							value={valueFrom}
-							onChange={handleChangeDateFrom}
-						/>
-					</div>
-					<Calendar _ref={ref} isActive={isActive} clickDay={clickDay} onChange={handleChangeDate} dates={date} />
-				</div>
-			)}
-		</StyledDatePicker>
+				)}
+			</StyledDatePicker>
+		</DataPickerContext.Provider>
 	)
 }
 
-export default DataPicker
+export default React.memo(DataPicker)

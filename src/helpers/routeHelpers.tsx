@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import { Link, Route, Routes, useMatch } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { Typography } from '@/components/atoms'
@@ -42,9 +42,10 @@ export const RenderRoutes: FC<NavigatorProps> = ({ routes }) => {
 // }
 
 const singleRoute = (route: Iroutes, locationState: IBreadcrumb[]) => {
+	const match = useMatch(route.path)
 	return (
 		<NavigatorRouter key={route.name}>
-			<StyledNavLink to={route.path} state={locationState} data-testid={route.name}>
+			<StyledNavLink className={match ? 'active' : ''} to={route.path} state={locationState} data-testid={route.name}>
 				<div className="flex">
 					<IconMenuContainer>{route.icon}</IconMenuContainer>
 
@@ -75,7 +76,6 @@ export const displayRouteMenu = (routes: IrouteCategory[]) => {
 	 */
 
 	const role = 'user'
-
 	// loop through the array of routes and generate an unordered list
 	return (
 		<NavigatorContainer>
@@ -129,13 +129,14 @@ const IconMenuContainer = styled.div(() => [
 	`
 ])
 
-const StyledNavLink = styled(NavLink)`
+const StyledNavLink = styled(Link)`
 	color: ${colors['black']};
 	height: inherit;
 	display: flex;
 	align-items: center;
 	padding: 0 16px;
 	border-radius: 4px;
+
 	&.active {
 		background: ${colors['LightGreen']};
 		color: ${colors['SElifeGreen']};

@@ -57,6 +57,9 @@ export const StyledInput = styled.input<Pick<InputProps, 'error'>>`
 	color: ${colors['black']};
 	/* width: 100%; */
 	width: ${({ width = '100%' }) => width};
+	::-webkit-calendar-picker-indicator {
+		display: none;
+	}
 
 	:hover {
 		border: 1px solid ${colors['BorderGray']};
@@ -104,7 +107,16 @@ export const IconCloseContainer = styled(IconInputContainer)`
 	:hover {
 		cursor: pointer;
 	}
+
 	/* svg path {
 		stroke: ${colors['TextLightGray']};
 	} */
+`
+
+export const IconCalendarContainer = styled.div`
+	margin: 0 ${rootValues['smallPd']};
+	position: absolute;
+	:hover {
+		cursor: pointer;
+	}
 `

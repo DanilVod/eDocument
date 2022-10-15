@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 
-import { DatePickerDate } from '@/components/molecules/DataPicker/DataPicker'
+import { DataPickerContext, DatePickerDate } from '@/components/molecules/DataPicker/DataPicker'
 
 import ArrowIcon from '@/assets/icons/Arrow.svg?component'
 
@@ -12,17 +12,18 @@ export interface ICalendar {
 	_ref?: React.RefObject<HTMLDivElement>
 	onChange: (dates: DatePickerDate) => void
 	clickDay: (date: Date) => void
-	dates: DatePickerDate
+	// dates: DatePickerDate
 	isActive: boolean
 }
 
 const Calendar: FC<ICalendar> = (props) => {
 	const [date, setDate] = useState(new Date(Date.now()))
+	const { dates } = useContext(DataPickerContext)
 
 	useEffect(() => {
-		if (props.dates.from) setDateExtra(new Date(props.dates.from.getFullYear(), props.dates.from.getMonth(), 1), 0)
-		else if (props.dates.to) setDateExtra(new Date(props.dates.to?.getFullYear(), props.dates.to?.getMonth(), 1), 0)
-	}, [props.dates])
+		if (dates.from) setDateExtra(new Date(dates.from.getFullYear(), dates.from.getMonth(), 1), 0)
+		else if (dates.to) setDateExtra(new Date(dates.to?.getFullYear(), dates.to?.getMonth(), 1), 0)
+	}, [dates])
 
 	const setDateExtra = (date: Date, val: number) => {
 		setDate(new Date(date.setMonth(date.getMonth() + val)))
@@ -56,8 +57,8 @@ const Calendar: FC<ICalendar> = (props) => {
 				</ForwardIconContainer>
 			</ArrowsContainer>
 			<div className="flex">
-				<CalendarMonth clickDay={props.clickDay} dates={props.dates} setDates={props.onChange} month={getDate(date, 'first', 'month')} year={getDate(date, 'first', 'year')} />
-				<CalendarMonth clickDay={props.clickDay} dates={props.dates} setDates={props.onChange} month={getDate(date, 'second', 'month')} year={getDate(date, 'second', 'year')} />
+				<CalendarMonth clickDay={props.clickDay} month={getDate(date, 'first', 'month')} year={getDate(date, 'first', 'year')} />
+				<CalendarMonth clickDay={props.clickDay} month={getDate(date, 'second', 'month')} year={getDate(date, 'second', 'year')} />
 			</div>
 		</StyledCalendar>
 	)

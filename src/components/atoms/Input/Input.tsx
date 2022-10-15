@@ -1,88 +1,92 @@
-import React, { FC, useEffect, useState } from 'react'
+import { useWhyDidYouUpdate } from 'ahooks'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
+import useDebounce from '@/hooks/useDebounce'
+
+import { IValidations } from '@/types/IValidations'
+
+import CalendarIcon from '@/assets/icons/Calendar.svg?component'
 import CloseIcon from '@/assets/icons/Close.svg?component'
 import ErrorIcon from '@/assets/icons/Error.svg?component'
 
 import { Typography } from '../Typography/Typography'
 
-import { IconCloseContainer, IconInputContainer, InputContainer, InputValueContainer, StyledInput, StyledLabel } from './Input.style'
-import { errors } from '@/validations/errors'
-import { patterns, typePattern } from '@/validations/patterns'
+import { IconCalendarContainer, IconCloseContainer, IconInputContainer, InputContainer, InputValueContainer, StyledInput, StyledLabel } from './Input.style'
+import generateErrorMes from './utils/generateErrorMes'
+import { validate } from './utils/validate'
 
 export interface InputProps {
 	placeholder: string
-	value: string
+	value?: string
 	name: string
-	// clearValue: (name: string) => void | (() => void)
+	// onClick?: () => void
 	label: string
 	disabled?: boolean
 	width?: string
-	onChange: (name: string, value: string) => void
-	required?: boolean
+	onChange: (name: string, value: string, error: string) => void
 	error?: string
-	// onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
-	setFormError?: (err: string) => void
+	type?: string
+	// readonly _ref?: React.RefObject<HTMLInputElement>
+	validations?: IValidations
 }
 
 export const Input: FC<InputProps> = (props: InputProps) => {
 	const [value, setValue] = useState<string>('')
 	const [error, setError] = useState<string>('')
-	const fieldName = props.name as keyof typeof patterns
+	const isFirstRender = useRef(true)
+	const required = props.validations && props.validations.required && props.validations.required.value
 
-	useEffect(() => {
-		const re = new RegExp(patterns[fieldName], 'i')
-		if (props.setFormError) {
-			if (value && !re.test(value)) props.setFormError(errors[fieldName]['isNotValid'])
-			else if (!props.required) props.setFormError('')
-			else if (value && props.error) props.setFormError('')
-		} else {
-			if (value && !re.test(value)) setError(errors[fieldName]['isNotValid'])
-			else if (!props.required) setError('')
-		}
+	const errorMessages = generateErrorMes(props.validations)
 
-		props.onChange(props.name, value)
-	}, [value])
+	const updateFormValue = useDebounce(() => {
+		props.onChange(props.name, value, error)
+	}, 1000)
 
-	const handleBlur = () => {
-		if (error != errors[fieldName]['isNotField'] && props.required && !value) {
-			if (props.setFormError) props.setFormError(errors[fieldName]['isNotField'])
-			else setError(errors[fieldName]['isNotField'])
+	const clearValue = () => {
+		setValue('')
+		if (required) {
+			setError(errorMessages.required)
 		}
 	}
 
-	const addSuffixIcon = () => {
-		if (error) {
-			return (
-				<IconInputContainer>
-					<ErrorIcon />
-				</IconInputContainer>
-			)
-		} else if (props.value) {
-			return (
-				<IconCloseContainer
-					onClick={() => {
-						setValue('')
-						if (props.required) {
-							if (props.setFormError) props.setFormError(errors[fieldName]['isNotField'])
-							else setError(errors[fieldName]['isNotField'])
-						}
-
-						// if (error != errors[fieldName]['isNotField'] && props.required && value) {
-						// 	setError(errors[fieldName]['isNotField'])
-						// }
-					}}
-				>
-					<CloseIcon />
-				</IconCloseContainer>
-			)
+	const handleBlur = () => {
+		if (required && !value) {
+			setError(errorMessages.required)
 		}
+	}
+
+	useEffect(() => {
+		if (!isFirstRender.current) updateFormValue()
+		const err = validate(errorMessages, value, props.validations)
+		if (err !== undefined) setError(err)
+
+		isFirstRender.current = false
+	}, [value, error])
+
+	const addSuffixIcon = () => {
+		let icon
+		if (props.type === 'date') icon = <CalendarIcon />
+		else if (error) icon = <ErrorIcon />
+		else if (value) icon = <CloseIcon />
+
+		return (
+			<IconCalendarContainer
+				onClick={() => {
+					if (value) clearValue()
+				}}
+			>
+				{icon}
+			</IconCalendarContainer>
+		)
 	}
 
 	return (
 		<InputContainer>
-			<Typography type="p-medium" color="TextLightGray">
-				<StyledLabel>{props.label}</StyledLabel>
-			</Typography>
+			{props.label && (
+				<Typography type="p-medium" color="TextLightGray">
+					<StyledLabel>{props.label}</StyledLabel>
+				</Typography>
+			)}
 			<div style={{ width: '100%' }}>
 				<InputValueContainer>
 					<Typography isInput type="p-medium" color="TextLightGray">
@@ -90,22 +94,19 @@ export const Input: FC<InputProps> = (props: InputProps) => {
 							{...props}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								setValue(e.target.value)
-								// if (error) props.onChange(props.name, e.target.value, false)
-								// else props.onChange(props.name, e.target.value, true)
-								// console.log(error)
 							}}
 							onBlur={handleBlur}
-							error={error || props.error}
+							error={error}
 							value={value}
 						/>
 					</Typography>
 					{addSuffixIcon()}
 				</InputValueContainer>
 				<Typography type="p-medium" color="red">
-					{error || props.error}
+					{error}
 				</Typography>
 			</div>
 		</InputContainer>
 	)
 }
-export default Input
+export default React.memo(Input)
