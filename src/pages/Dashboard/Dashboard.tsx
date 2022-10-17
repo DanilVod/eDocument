@@ -88,6 +88,7 @@ const Dashboard = () => {
 					required: true,
 					errorMessage: 'Пожалуйста, заполните это поле'
 				}
+
 			}
 		},
 		{
@@ -100,6 +101,7 @@ const Dashboard = () => {
 					required: { value: true, errorMessage: 'Пожалуйста, заполните это поле' },
 					pattern: { type: 'email', errorMessage: 'Поле заполнено некорректно' }
 				}
+
 			}
 		},
 		{
@@ -109,6 +111,7 @@ const Dashboard = () => {
 				label: 'Название',
 				placeholder: 'Введите название поставщика услуг',
 				validations: { required: { value: true } }
+
 			}
 		}
 	]

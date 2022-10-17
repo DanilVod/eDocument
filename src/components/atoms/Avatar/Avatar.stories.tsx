@@ -17,5 +17,6 @@ const Template: ComponentStory<typeof Avatar> = (args) => (
 
 export const Example = Template.bind({})
 Example.args = {
-	image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/404.jpg'
+	image:
+		'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/404.jpg'
 }

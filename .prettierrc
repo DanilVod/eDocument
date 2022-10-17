@@ -4,7 +4,7 @@
 	"useTabs": true,
 	"semi": false,
 	"singleQuote": true,
-  "printWidth": 200,
+  "printWidth": 100,
 	"importOrder": [
 		"<THIRD_PARTY_MODULES>",
 		"^@/components/organisms",
