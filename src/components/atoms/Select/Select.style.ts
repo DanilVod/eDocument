@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components'
 
-import { ISelectStyle, IWrapStyledSelect } from './Select'
+import { ISelectStyle } from './Select'
 import SelectItem from './SelectItem'
 import { colors, rootValues } from '@/constants/global.styles'
 
-const handleActiveField = ({ isActive, isField, error }: ISelectStyle) => {
+const handleActiveField = ({ isActive, error }: ISelectStyle) => {
 	if (isActive)
 		return css`
 			border: 1px solid ${colors['BorderGray']};
@@ -23,7 +23,7 @@ const handleActiveField = ({ isActive, isField, error }: ISelectStyle) => {
 	`
 }
 
-export const WrapStyledSelect = styled.div<IWrapStyledSelect>`
+export const WrapStyledSelect = styled.div<{ width?: string }>`
 	display: flex;
 	align-items: baseline;
 
@@ -55,9 +55,18 @@ export const StyledSelectList = styled.div<ISelectStyle>`
 	background-color: ${colors['white']};
 	margin-top: ${rootValues['mediumPd']};
 	box-shadow: ${rootValues['selectBoxShadow']};
-	display: ${(props) => (props.isActive ? 'block' : 'none')};
+	transition: opacity 0.3s, visibility 0.3s;
+	opacity: 0;
+	visibility: hidden;
+	${(props) =>
+		props.isActive &&
+		css`
+			opacity: 1;
+			visibility: visible;
+		`}
+	/* display: ${(props) => (props.isActive ? 'block' : 'none')}; */
 	/* transform: scale(0.9); */
-	transition: all 0.3s ease-in;
+	
 	position: absolute;
 `
 

@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
+import { useWhyDidYouUpdate } from 'ahooks'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import useComponentVisible from '@/hooks/useComponentVisible'
 
@@ -9,6 +10,8 @@ import { Typography } from '../Typography/Typography'
 
 import { IconContainer, ListItemWrap, ListStyled, StyledLabel, StyledSelect, StyledSelectList, WrapStyledSelect } from './Select.style'
 import { SelectItem } from './SelectItem'
+import validate from './utils/validate'
+import { ColorsName } from '@/constants/global.styles'
 import { errors, typeError } from '@/validations/errors'
 
 export interface SelectProps {
@@ -16,15 +19,15 @@ export interface SelectProps {
 	label: string
 	name: string
 	placeholder: string
-	value: string | string[]
+	value?: string | string[]
 	list: ListItem[]
 	disabled?: boolean
-	required?: boolean
-	onChange: (name: string, values: string | string[]) => void
+	onChange?: (name: string, values: string | string[], error?: string) => void
 	multy?: boolean
 	onBlur?: (name: string, error: string) => void
 	error?: string
 	setFormError?: (err: string) => void
+	validations?: { required: boolean; errorMessage: string }
 }
 
 export interface ISelectStyle {
@@ -34,127 +37,98 @@ export interface ISelectStyle {
 	error?: string
 }
 
-export interface IWrapStyledSelect {
-	ref: React.RefObject<HTMLDivElement>
-	// onClick: () => void
-	width?: string
-}
-
 const Select: FC<SelectProps> = (props: SelectProps) => {
 	const { ref, isActive, setIsActive } = useComponentVisible(false)
-	const [isField, setIsField] = useState<boolean>(true)
+	// const [isField, setIsField] = useState<boolean>(true)
 	const [values, setValues] = useState<string[]>([])
+	const [value, setValue] = useState<string>('')
 	const [error, setError] = useState<string>('')
+	const isFirstRender = useRef(true)
 
 	//setValues асинхронно и хранит предыдущее состояние
 	let nextValues = values
 
+	const update = () => {
+		if (props.onChange && !isFirstRender.current && !isActive)
+			if (props.multy) props.onChange(props.name, values)
+			else props.onChange(props.name, value)
+	}
+
 	useEffect(() => {
-		if (props.setFormError) {
-			if ((!props.value || (props.multy && !values.length)) && props.required && !isActive && !isField) {
-				props.setFormError(errors[props.name as keyof typeError].isNotField)
-				setError(errors[props.name as keyof typeError].isNotField)
-			} else {
-				props.setFormError('')
-				setError('')
-			}
-		} else {
-			if ((!props.value || (props.multy && !values.length)) && props.required && !isActive && !isField) {
-				setError(errors[props.name as keyof typeError].isNotField)
-			} else setError('')
+		if (!isFirstRender.current) {
+			const error = validate(values, value, isActive, props.multy, props.validations?.required, props.validations?.errorMessage)
+			setError(error)
 		}
+		update()
+		isFirstRender.current = false
 	}, [isActive])
 
 	const renderSelectValue = () => {
-		if (props.value && !Array.isArray(props.value)) {
-			return <Typography type="p-medium">{props.value}</Typography>
-		} else if (values.length) {
-			return (
-				<Typography type="p-medium" color={props.disabled ? 'DisabledGray' : 'black'}>
-					{props.placeholder}
-				</Typography>
-			)
-		} else {
-			return (
-				<Typography type="p-medium" color={props.disabled ? 'DisabledGray' : 'TextLightGray'}>
-					{props.placeholder}
-				</Typography>
-			)
+		let text,
+			color = 'black' as ColorsName
+		if (value) text = value
+		else {
+			text = props.placeholder
+			color = values.length ? 'black' : 'TextLightGray'
 		}
-	}
 
-	const renderError = () => {
-		// if (!isField && (!props.value || (props.multy && !values.length)) && !isActive) {
 		return (
-			<Typography type="p-medium" color="red">
-				{error || props.error}
+			<Typography type="p-medium" color={props.disabled ? 'DisabledGray' : color}>
+				{text}
 			</Typography>
 		)
-		// }
 	}
 
 	const renderList = () => {
-		if (isActive) {
-			return (
-				<StyledSelectList isActive={isActive}>
-					<ListStyled
-						onClick={() => {
-							if (!props.disabled && !props.multy) setIsActive(!isActive)
-						}}
-					>
-						{!props.multy && (
-							<ListItemWrap
-								onClick={() => {
-									props.onChange(props.name, '')
-									if (props.required) setIsField(false)
-								}}
-							>
-								<SelectItem text={props.placeholder} />
-							</ListItemWrap>
-						)}
-						{props.list.map((item: ListItem, index: number) => (
-							<ListItemWrap
-								key={index}
-								onClick={() => {
-									if (props.multy) {
-										if (values.includes(item.text)) nextValues = values.filter((value) => value !== item.text)
-										else nextValues = [...values, item.text]
-										setValues(nextValues)
-										props.onChange(props.name, nextValues)
-										if (!nextValues.length) setIsField(false)
-										else setIsField(true)
-									} else {
-										props.onChange(props.name, item.text)
-										setIsField(true)
-									}
-								}}
-							>
-								<SelectItem multy={props.multy} text={item.text} key={index} values={values} />
-							</ListItemWrap>
-						))}
-					</ListStyled>
-				</StyledSelectList>
-			)
-		}
+		return (
+			<StyledSelectList ref={ref} isActive={isActive}>
+				<ListStyled
+					onClick={() => {
+						if (!props.disabled && !props.multy) setIsActive(!isActive)
+					}}
+				>
+					{!props.multy && (
+						<ListItemWrap
+							onClick={() => {
+								setValue('')
+							}}
+						>
+							<SelectItem text={props.placeholder} />
+						</ListItemWrap>
+					)}
+					{props.list.map((item: ListItem, index: number) => (
+						<ListItemWrap
+							key={index}
+							onClick={() => {
+								if (props.multy) {
+									if (values.includes(item.text)) nextValues = values.filter((value) => value !== item.text)
+									else nextValues = [...values, item.text]
+									setValues(nextValues)
+								} else {
+									setValue(item.text)
+								}
+							}}
+						>
+							<SelectItem multy={props.multy} text={item.text} key={index} values={values} />
+						</ListItemWrap>
+					))}
+				</ListStyled>
+			</StyledSelectList>
+		)
 	}
 
 	return (
-		<WrapStyledSelect ref={ref} width={props.width}>
+		<WrapStyledSelect width={props.width}>
 			<Typography type="p-medium" color="TextLightGray">
 				<StyledLabel>{props.label}</StyledLabel>
 			</Typography>
 			<div style={{ width: '100%' }}>
 				<StyledSelect
 					onClick={() => {
-						if (!props.disabled) setIsActive(!isActive)
-
-						if ((!props.value || (props.multy && !values.length)) && props.required) {
-							setIsField(false)
-						}
+						if (!props.disabled && !isActive) setIsActive(!isActive)
 					}}
 					width={props.width}
 					isActive={isActive}
-					isField={isField}
 					error={props.error || error}
 				>
 					{renderSelectValue()}
@@ -162,7 +136,9 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 						<DropdownIcon />
 					</IconContainer>
 				</StyledSelect>
-				{renderError()}
+				<Typography type="p-medium" color="red">
+					{error || props.error}
+				</Typography>
 				{renderList()}
 			</div>
 		</WrapStyledSelect>
@@ -175,4 +151,4 @@ const Select: FC<SelectProps> = (props: SelectProps) => {
 // 	list: []
 // }
 
-export default Select
+export default React.memo(Select)

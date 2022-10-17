@@ -1,6 +1,8 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Typography } from '@/components/atoms'
+
+import { IValidations } from '@/types/IValidations'
 
 import CalendarIcon from '@/assets/icons/Calendar.svg?component'
 
@@ -9,41 +11,32 @@ import { errors } from '@/validations/errors'
 import { patterns, typePattern } from '@/validations/patterns'
 
 export interface DataInputProps {
-	placeholder: string
-	value: string
+	placeholder?: string
+	// value: string
 	name: string
 	onClick: () => void
 	readonly _ref: React.RefObject<HTMLInputElement>
-	label: string
+	label?: string
 	disabled?: boolean
 	width?: string
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 	required?: boolean
 	error?: string
 	onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
+	isActiveCalendar: boolean
 }
 
 export const DataInput: FC<DataInputProps> = (props: DataInputProps) => {
-	// const [error, setError] = useState<string>()
-	// const [value, setValue] = useState<string>(props.value)
-	// let fieldName = props.name as keyof typePattern
-	// if (props.name.includes('To')) fieldName = props.name.split('To')[0] as keyof typePattern
-	// else if (props.name.includes('From')) fieldName = props.name.split('From')[0] as keyof typePattern
-	// useEffect(() => {
-	// 	const re = new RegExp(patterns[fieldName])
-	// 	if (props.value && !re.test(props.value)) setError(errors[fieldName]['isNotValid'])
-	// 	else setError('')
-	// }, [props.value])
+	const [isFirstRender, setIsFirstRender] = useState(true)
 
-	// useEffect(() => {
-	// 	if (props.value) setError('')
-	// }, [props.value])
-	// console.log(props.name, props.value)
-	// const handleBlur = () => {
-	// 	if (props.required && !props.value) {
-	// 		setError(errors[fieldName]['isNotField'])
-	// 	} else setError('')
-	// }
+	const err = useMemo(() => {
+		if (!isFirstRender && !props._ref.current?.disabled)
+			if (props.required && !props._ref.current?.value && !props.isActiveCalendar) {
+				return 'Заполните поле'
+			}
+		setIsFirstRender(false)
+		return ''
+	}, [props.isActiveCalendar])
 
 	const addSuffixIcon = () => {
 		return (
@@ -64,24 +57,13 @@ export const DataInput: FC<DataInputProps> = (props: DataInputProps) => {
 			<div>
 				<InputValueContainer>
 					<Typography isInput type="p-medium" color="TextLightGray">
-						<StyledInput
-							// onClick="event.preventDefault()"
-							width={props.width}
-							type="date"
-							ref={props._ref}
-							disabled={props.disabled}
-							name={props.name}
-							onChange={props.onChange}
-							value={props.value}
-							// onBlur={handleBlur}
-							error={props.value ? '' : props.error}
-						/>
+						<StyledInput width={props.width} type="date" ref={props._ref} disabled={props.disabled} name={props.name} onChange={props.onChange} error={err} />
 					</Typography>
 					{addSuffixIcon()}
 				</InputValueContainer>
 				<div>
 					<Typography type="p-medium" color="red">
-						{props.value ? '' : props.error}
+						{err}
 					</Typography>
 				</div>
 			</div>

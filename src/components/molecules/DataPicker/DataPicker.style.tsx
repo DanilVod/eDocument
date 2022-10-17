@@ -6,10 +6,9 @@ export const StyledLabel = styled.div`
 	/* border: 1px solid #000; */
 	margin-right: ${rootValues['labelMgRight']};
 	width: ${rootValues['labelWidth']};
-	display: flex;
+	/* display: flex;
 	align-items: start;
-	margin-top: 1%;
-	/* white-space: nowrap; */
+	margin-top: 1%; */
 `
 
 export const IconContainer = styled.div`
